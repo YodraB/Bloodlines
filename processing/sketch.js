@@ -2,15 +2,14 @@ function setup() {
   // put setup code here
   size = 800;
 	createCanvas(size, size);
-	background(0, 153, 255);
-	mask = loadImage("images/Khundii_BasePaint_White.png");
-	//mane = loadImage("KhundiiMane.png");
-	//lines = loadImage("KhundiiLines.png")
+	background(204, 229, 255);
+	// here we use a callback to display the image after loading
+  loadImage('images/Khundii_BasePaint_White.png', img => {
+    image(img, 0, 0);
+   });
 }
 
 function draw() {
   // put drawing code here
   //ellipse(50, 50, 80, 80);
-  image(mask, 0, 0, size, size);
-  tint(204, 229, 255);
 }
