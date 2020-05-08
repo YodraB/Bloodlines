@@ -150,7 +150,7 @@ function distort(sourceImage){
   var result = [];
   sourceImage.loadPixels();
   for (i = 0; i < sourceImage.width; i++){
-    for (j = 0; j < sourceImage.height; j ++){
+    for (j = 0; j < sourceImage.height; j += 4){
       var res = vectorField[i][j];
       //console.log(res);
 
@@ -158,20 +158,22 @@ function distort(sourceImage){
       var jj = constrain(floor(i + res.y), 0, sourceImage.height - 1);
       //console.log(ii, jj);
       
-      result[i*sourceImage.height + j] = color(sourceImage.pixels[i*sourceImage.height+j], sourceImage.pixels[1 + i*sourceImage.height+j], sourceImage.pixels[2 + i*sourceImage.height+j], sourceImage.pixels[3 + i*sourceImage.height+j]);
-      //console.log(sourceImage.pixels[j])
+      result[i + sourceImage.width * j] = color(sourceImage.pixels[i + sourceImage.width * j], sourceImage.pixels[1 + i + sourceImage.width * j], sourceImage.pixels[2 + i + sourceImage.width * j], sourceImage.pixels[3 + i + sourceImage.width * j]);
+      //console.log(i*sourceImage.width + j, 1 + i*sourceImage.width + j, 2 + i*sourceImage.width + j, 3 + i*sourceImage.width + j)
     }
   }
-  console.log(sourceImage.pixels)
+  //console.log(sourceImage.pixels[0])
 
-  for (i=0; i<width; i++) {
-    for(j=0;j<height;j++){
-      sourceImage.set(i, j, result[i*sourceImage.height + j]);
+  let d = pixelDensity()
+  for (n=0; n<sourceImage.width; n++) {
+    for(m=0; m<sourceImage.height; m++){
+      sourceImage.set(n, m, result[n + sourceImage.width * m]);
+      console.log(n * sourceImage.width + m)
     }
   }
   
   sourceImage.updatePixels();
-  image(sourceImage, 0, 0);
+  image(sourceImage, 0, 0, size, size);
   console.log('distort');
 }
 
@@ -221,6 +223,7 @@ function createPet(){
   tint(255);
 
   distort(test);
+  //image(test, 0, 0, size, size);
   
 
   //Eye - tint to set color
