@@ -11,10 +11,12 @@ function preload(){
   frontleft = loadImage('images/Khundii_FrontLeft.png');
   backleft = loadImage('images/Khundii_BackLeft.png');
   backright = loadImage('images/Khundii_BackRight.png');
-  agouti = loadImage('images/Khundii_Agouti_Basic.png');
+  agouti = loadImage('images/Khundii_Agouti.png');
+  maneless = loadImage('images/Khundii_Maneless.png');
   mane = loadImage('images/Khundii_Mane.png');
   eye = loadImage('images/Khundii_Eye.png');
   lines = loadImage('images/Khundii_Line.png');
+  test = loadImage('images/test.png');
 }
 
 function setup() {
@@ -38,7 +40,7 @@ function draw() {
   text('new pet', 100/2 + 40, 30/2 + 40);
 
   if (mouseX >= 40 && mouseX <= 40 + 100 &&
-    mouseY>=40 && mouseY <= 40 + 30){
+    mouseY >= 40 && mouseY <= 40 + 30){
       //checks if mouse is over button
       rectOver = true
   }
@@ -51,6 +53,10 @@ function mousePressed() {
     createPet();
   }
 }
+
+//function touchEnded(){
+//	createPet();
+//}
 
 function randomPick(array) {
 	var randomNumber = Math.floor(Math.random() * (array.length));
@@ -121,7 +127,6 @@ function makeSock(x, width, midwidth, minHeight, maxHeight, mask){
   } else {
     sockGraphic.bezierVertex(x + width, 675 - height, x + midwidth, 675 - (height + 50), x, 675 - (height + random(-50, 50)));
   }
-  console.log(height);
   sockGraphic.endShape();
   var Sock = createImage(size, size);
   Sock.copy(sockGraphic, 0, 0, sockGraphic.width, sockGraphic.height, 0, 0, sockGraphic.width, sockGraphic.height);
@@ -129,11 +134,52 @@ function makeSock(x, width, midwidth, minHeight, maxHeight, mask){
   image(Sock, 0, 0);
 }
 
+function distort(sourceImage){
+  let vectorField = [];
+  var amount = 100;
+  var scale = 0.01;
+  for (x = 0; x < sourceImage.width; x++){
+    let row = [];
+    for (y = 0; y < sourceImage.height; y++){
+      let vector = createVector(amount*(noise(scale*x,scale*y)-0.5), 4*amount*(noise(100+scale*x,scale*y)-0.5))
+      row.push(vector);
+    }
+    vectorField.push(row);
+  }
+  
+  var result = [];
+  sourceImage.loadPixels();
+  for (i = 0; i < sourceImage.width; i++){
+    for (j = 0; j < sourceImage.height; j ++){
+      var res = vectorField[i][j];
+      //console.log(res);
+
+      var ii = constrain(floor(i + res.x), 0, sourceImage.width - 1);
+      var jj = constrain(floor(i + res.y), 0, sourceImage.height - 1);
+      //console.log(ii, jj);
+      
+      result[i*sourceImage.height + j] = color(sourceImage.pixels[i*sourceImage.height+j], sourceImage.pixels[1 + i*sourceImage.height+j], sourceImage.pixels[2 + i*sourceImage.height+j], sourceImage.pixels[3 + i*sourceImage.height+j]);
+      //console.log(sourceImage.pixels[j])
+    }
+  }
+  console.log(sourceImage.pixels)
+
+  for (i=0; i<width; i++) {
+    for(j=0;j<height;j++){
+      sourceImage.set(i, j, result[i*sourceImage.height + j]);
+    }
+  }
+  
+  sourceImage.updatePixels();
+  image(sourceImage, 0, 0);
+  console.log('distort');
+}
+
 function createPet(){
   var genes = randomGenes(5);
   console.log(genes)
 
-  //Base Color - tint to set color
+  //Base Color - tint to set color()
   if (genes[0] != 'A' || genes[1] != 'A'){
     tint(50);
   } else {
@@ -142,7 +188,7 @@ function createPet(){
   image(ground, 0, 0, size, size);
 
   //Noise Under Tint  - makeNoise(scale, patch size)
-  tint(0, 0, 255);
+  tint(200);
   makeNoise(0.02, 1);
 
   //Mane Base Color - tint to set color
@@ -153,10 +199,11 @@ function createPet(){
   makeTint(255, 0, 255, 0.5, OVERLAY);
 
   //Agouti
-  //blend(agouti, 0, 0, imgSize, imgSize, 0, 0, size, size, MULTIPLY);
+  agouti.mask(maneless);
+  blend(agouti, 0, 0, imgSize, imgSize, 0, 0, size, size, MULTIPLY);
 
   //Socks - x, width, midpoint, minrandom, maxrandom, mask; tint to set color
-  tint(0);
+  tint(255);
 
   //Front left - 30 smallest, 300 largest
   makeSock(150, 85, 40, 30, 220, frontleft);
@@ -169,6 +216,12 @@ function createPet(){
 
   //Back right - 75 smallest, 270 largest
   makeSock(500, 85, 70, 75, 270, backright);
+
+  //Star
+  tint(255);
+
+  distort(test);
+  
 
   //Eye - tint to set color
   noTint();
