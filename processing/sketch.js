@@ -1,7 +1,7 @@
 let ground;
 let eye;
 let lines;
-let rectOver = false;
+var rectOver = false;
 let imgSize = 2048;
 
 function preload(){
@@ -42,21 +42,24 @@ function draw() {
   if (mouseX >= 40 && mouseX <= 40 + 100 &&
     mouseY >= 40 && mouseY <= 40 + 30){
       //checks if mouse is over button
-      rectOver = true
+      rectOver = true;
+  } else {
+    rectOver = false;
   }
   //makeShape(350, 350);
 }
 
 function mousePressed() {
+  console.log(rectOver)
   //if mouse is over button when mouse is pressed, button is pressed
   if (rectOver) {
     createPet();
   }
 }
 
-//function touchEnded(){
-//	createPet();
-//}
+function touchEnded(){
+	createPet();
+}
 
 function randomPick(array) {
 	var randomNumber = Math.floor(Math.random() * (array.length));
@@ -164,11 +167,10 @@ function distort(sourceImage){
   }
   //console.log(sourceImage.pixels[0])
 
-  let d = pixelDensity()
   for (n=0; n<sourceImage.width; n++) {
     for(m=0; m<sourceImage.height; m++){
-      sourceImage.set(n, m, result[n + sourceImage.width * m]);
-      console.log(n * sourceImage.width + m)
+      sourceImage.set(n, m, result[n * sourceImage.width + m]);
+      //console.log(n * sourceImage.width + m)
     }
   }
   
