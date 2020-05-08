@@ -149,28 +149,38 @@ function distort(sourceImage){
     vectorField.push(row);
   }
   
+  //console.log('x')
+
   var result = [];
   sourceImage.loadPixels();
-  for (i = 0; i < sourceImage.width; i++){
-    for (j = 0; j < sourceImage.height; j += 4){
+  for (i = 0; i < sourceImage.width; i++){ //sourceImage.width
+    for (j = 0; j < sourceImage.height; j += 4){ //sourceImage.height
       var res = vectorField[i][j];
       //console.log(res);
 
-      var ii = constrain(floor(i + res.x), 0, sourceImage.width - 1);
-      var jj = constrain(floor(i + res.y), 0, sourceImage.height - 1);
+      var ii = constrain(floor(j + res.x), 0, sourceImage.width - 1);
+      var jj = constrain(floor(j + res.y), 0, sourceImage.height - 1);
       //console.log(ii, jj);
       
-      result[i + sourceImage.width * j] = color(sourceImage.pixels[i + sourceImage.width * j], sourceImage.pixels[1 + i + sourceImage.width * j], sourceImage.pixels[2 + i + sourceImage.width * j], sourceImage.pixels[3 + i + sourceImage.width * j]);
-      //console.log(i*sourceImage.width + j, 1 + i*sourceImage.width + j, 2 + i*sourceImage.width + j, 3 + i*sourceImage.width + j)
+      result[i * sourceImage.width + j] = color(0, sourceImage.pixels[ii * sourceImage.width + jj + 1], sourceImage.pixels[ii * sourceImage.width + jj + 2], sourceImage.pixels[ii * sourceImage.width + jj + 3]);
     }
   }
+  //console.log(result)
+  //console.log(sourceImage.pixels[0 + sourceImage.width * 0])
 
   for (n=0; n<sourceImage.width; n++) {
     for(m=0; m<sourceImage.height; m++){
-      sourceImage.set(n, m, result[n * sourceImage.width + m]);
-      //console.log(n * sourceImage.width + m)
+      index = (n * sourceImage.width + m) * 4;
+      if (index >= 4194300){
+        index = 4194300;
+      }
+      sourceImage.pixels[index] = red(result[index]);
+      sourceImage.pixels[index + 1] = green(result[index]);
+      sourceImage.pixels[index + 2] = blue(result[index]);
+      sourceImage.pixels[index + 3] = alpha(result[index]);
     }
   }
+
   
   sourceImage.updatePixels();
   image(sourceImage, 0, 0, size, size);
@@ -219,11 +229,8 @@ function createPet(){
   //Back right - 75 smallest, 270 largest
   makeSock(500, 85, 70, 75, 270, backright);
 
-  //Star
-  tint(255);
 
   distort(test);
-  //image(test, 0, 0, size, size);
   
 
   //Eye - tint to set color
