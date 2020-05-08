@@ -50,16 +50,15 @@ function draw() {
 }
 
 function mousePressed() {
-  console.log(rectOver)
   //if mouse is over button when mouse is pressed, button is pressed
   if (rectOver) {
     createPet();
   }
 }
 
-function touchEnded(){
-	createPet();
-}
+//function touchEnded(){
+//	createPet();
+//}
 
 function randomPick(array) {
 	var randomNumber = Math.floor(Math.random() * (array.length));
@@ -165,7 +164,6 @@ function distort(sourceImage){
       //console.log(i*sourceImage.width + j, 1 + i*sourceImage.width + j, 2 + i*sourceImage.width + j, 3 + i*sourceImage.width + j)
     }
   }
-  //console.log(sourceImage.pixels[0])
 
   for (n=0; n<sourceImage.width; n++) {
     for(m=0; m<sourceImage.height; m++){
