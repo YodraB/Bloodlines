@@ -11,6 +11,7 @@ function preload(){
   frontleft = loadImage('images/Khundii_FrontLeft.png');
   backleft = loadImage('images/Khundii_BackLeft.png');
   backright = loadImage('images/Khundii_BackRight.png');
+  bluemask = loadImage('images/Khundii_BlueMask.png');
   agouti = loadImage('images/Khundii_Agouti.png');
   headstripe = loadImage('images/Khundii_Agouti_Headstripe.png');
   maneless = loadImage('images/Khundii_Maneless.png');
@@ -53,6 +54,8 @@ function mousePressed() {
   //if mouse is over button when mouse is pressed, button is pressed
   if (rectOver) {
     console.log('loading');
+    //var genes = randomGenes();
+    //console.log(genes)
     createPet();
   }
 }
@@ -66,10 +69,32 @@ function randomPick(array) {
 	return array[randomNumber];
 }
 
-function randomGenes(geneNumber){
-	genotype = "";
-	for (i = 0; i < geneNumber * 2; i++){
-		genotype += randomPick(['A','a']);
+function randomGenes(){
+  var genotype = "";
+  var geneList = [];
+  
+  var redGround = ['R', 'P', 'r'];
+  var blue = ['B', 'y', 'b'];
+  var extension = ['M', 'E', 'r', 'n'];
+  var redPattern = ['P', 's', 'g'];
+  var domBlack = ['K', 'b', 'k']
+  
+
+	for (i = 0; i < 16 * 2; i++){
+    if (i == 0 || i == 1){
+      geneList = redGround;
+    } else if (i == 18 || i == 19) {
+      geneList = blue;
+    } else if (i == 20 || i == 21){
+      geneList = extension;
+    } else if (i == 22 || i == 23){
+      geneList = redPattern;
+    } else if (i == 30 || i == 31){
+      geneList = domBlack;
+    } else {
+      geneList = ['A', 'a'];
+    }
+		genotype += randomPick(geneList);
   	}
   	return genotype;
 }
@@ -87,18 +112,25 @@ function noiseImageCreate(time, noiseScale, coeff){
   return noiseImage
 }
 
-function makeNoise(noiseScale, coeff){
+function makeNoise(noiseScale, coeff, mask){
   // Coeff 0.8 makes small blotches; 1.8 makes huge patches
   let time = new Date;
   time = time.getMilliseconds();
 
-  noiseImageLegs = noiseImageCreate(time - 70, noiseScale, coeff)
-  noiseImageLegs.mask(back);
-  image(noiseImageLegs, 0 , 0);
+  if (mask == ground){
+    noiseImageLegs = noiseImageCreate(time - 70, noiseScale, coeff)
+    noiseImageLegs.mask(back);
+    image(noiseImageLegs, 0 , 0);
 
-  noiseImage = noiseImageCreate(time, noiseScale, coeff)
-  noiseImage.mask(front);
-  image(noiseImage, 0 , 0);
+    noiseImage = noiseImageCreate(time, noiseScale, coeff)
+    noiseImage.mask(front);
+    image(noiseImage, 0 , 0);
+  } else if (mask == bluemask){
+    noiseImage = noiseImageCreate(time, noiseScale, coeff)
+    noiseImage.mask(bluemask);
+    image(noiseImage, 0 , 0);
+  }
+  
 }
 
 function makeTint(red, green, blue, alpha, mode){
@@ -209,46 +241,147 @@ function distort(sourceImage, amount, scale, mask, blendmode){
 }
 
 function createPet(){
-  var genes = randomGenes(5);
-  //console.log(genes)
+  clear();
+  background(204, 229, 255);
+  var genes = randomGenes();
+  console.log(genes)
+
+  //PHAEOMMELANIN
+
+  //Blue gene
+  var blueMaskVar = ground;
+  var redOn = true;
+  if ((genes[18] == 'y' || genes[19] == 'y') && (genes[18] != 'B' && genes[19] != 'B')){
+    noTint();
+    image(ground, 0, 0, size, size);
+    blueMaskVar = bluemask;
+  } else if (genes[18] == 'b' && genes[19] == 'b'){
+    noTint();
+    image(ground, 0, 0, size, size);
+    redOn = false;
+  } else {
+    blueMaskVar = ground;
+  }
+  
 
   //Base Color - tint to set color()
-  if (genes[0] != 'A' || genes[1] != 'A'){
-    tint(100);
+  var groundColor = '';
+  if (genes[0] == 'R' || genes[1] == 'R'){
+    groundColor = 'red';
+  } else if (genes[0] == 'P' || genes[1] == 'P'){
+    groundColor = 'pink';
+  } else {
+    groundColor = 'white';
+  }
+
+  var groundRec = 0;
+  for (i = 0; i < 8; i+=2 ){
+    if (genes[i + 2] != 'A' && genes[i + 3] != 'A'){
+      groundRec += 1;
+    }
+  }
+  
+  var redColorValue = [0, 0, 0];
+  var pinkColorValue = [0, 0, 0];
+  if (groundRec == 4){
+    redColorValue = [179, 0, 0];
+    pinkColorValue = [255, 51, 154];
+  } else if (groundRec == 3){
+    redColorValue = [255, 0, 0];
+    pinkColorValue = [255, 128, 191];
+  } else if (groundRec == 2){
+    redColorValue = [255, 102, 0];
+    pinkColorValue = [255, 179, 217];
+  } else if (groundRec == 1){
+    redColorValue = [255, 207, 102];
+    pinkColorValue = [255, 204, 230];
+  } else {
+    redColorValue = [255, 255, 153];
+    pinkColorValue = [255, 230, 242];
+  }
+
+  if (groundColor == 'red'){
+    tint(redColorValue);
+  } else if (groundColor == 'pink'){
+    tint(pinkColorValue);
   } else {
     noTint();
   }
-  image(ground, 0, 0, size, size);
+  if (redOn == true){
+    image(blueMaskVar, 0, 0, size, size);
+  }
+
+  //Red Patches
+  var redPatches = false;
+  if (genes[10] == 'A' || genes[11] == 'A'){
+    redPatches = true;
+  }
+
+  var redPatchAmount = 0;
+  for (i = 0; i < 6; i+=2 ){
+    if (genes[i + 12] == 'a' && genes[i + 13] == 'a'){
+      redPatchAmount += 1;
+    }
+  }
+  
+  tint(redColorValue);
+
+  if (redOn == true){
+    if (redPatches == true && redPatchAmount == 1){
+      makeNoise(0.02, 0.8, blueMaskVar);
+    } else if (redPatches == true && redPatchAmount == 2) {
+      makeNoise(0.02, 1, blueMaskVar);
+    } else if (redPatches == true && redPatchAmount == 3) {
+      makeNoise(0.02, 1.4, blueMaskVar);
+    }
+  }
+
+  //Red pattern
+
+  //Banding
+
+  //EUMELANIN
+
+  var blackColor = [0]
+
+  //Dominant black
+  if (genes[30] == 'K' || genes[31] == 'K'){
+    tint(blackColor);
+    //image(ground, 0, 0, size, size);
+  }
+
+  //Black patches
+  
 
   //Noise Under Tint  - makeNoise(scale, patch size)
-  tint(200);
+  //tint(200);
   //makeNoise(0.02, 1);
 
   //Mane Base Color - tint to set color
-  tint(75);
-  image(mane, 0, 0, size, size);
+  //tint(75);
+  //image(mane, 0, 0, size, size);
 
   //Tint Over Mane - r, g, b, a, mode
   //makeTint(255, 0, 255, 0.5, OVERLAY);
 
   //Agouti - default amount 100, scale 0.001
-  distort(agouti, 100, 0.001, maneless, MULTIPLY);
-  blend(headstripe, 0, 0, imgSize, imgSize, 0, 0, size, size, MULTIPLY);
+  //distort(agouti, 100, 0.001, maneless, MULTIPLY);
+  //blend(headstripe, 0, 0, imgSize, imgSize, 0, 0, size, size, MULTIPLY);
 
   //Socks - x, width, midpoint, minrandom, maxrandom, mask; tint to set color
-  tint(255);
+  //tint(255);
 
   //Front left - 30 smallest, 300 largest
-  makeSock(150, 85, 40, 30, 220, frontleft);
+  //makeSock(150, 85, 40, 30, 220, frontleft);
 
   //Back left - 30 smallest, 270 largest
   //makeSock(350, 175, 180, 160, 270, backleft);
 
   //Front right - 40 smallest, 220 largest
-  makeSock(100, 85, 40, 40, 40, back);
+  //makeSock(100, 85, 40, 40, 40, back);
 
   //Back right - 75 smallest, 270 largest
-  makeSock(500, 85, 70, 75, 270, backright);
+  //makeSock(500, 85, 70, 75, 270, backright);
 
   //Eye - tint to set color
   tint(255, 250, 205);
