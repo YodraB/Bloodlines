@@ -12,6 +12,7 @@ function preload(){
   backleft = loadImage('images/Khundii_BackLeft.png');
   backright = loadImage('images/Khundii_BackRight.png');
   agouti = loadImage('images/Khundii_Agouti.png');
+  headstripe = loadImage('images/Khundii_Agouti_Headstripe.png');
   maneless = loadImage('images/Khundii_Maneless.png');
   mane = loadImage('images/Khundii_Mane.png');
   eye = loadImage('images/Khundii_Eye.png');
@@ -26,7 +27,6 @@ function setup() {
   background(204, 229, 255);
   textAlign(CENTER, CENTER);
 
-  //tint(0, 153, 255);
   image(ground, 0, 0, size, size);
   
   image(lines, 0, 0, size, size);
@@ -52,6 +52,7 @@ function draw() {
 function mousePressed() {
   //if mouse is over button when mouse is pressed, button is pressed
   if (rectOver) {
+    console.log('loading');
     createPet();
   }
 }
@@ -136,13 +137,16 @@ function makeSock(x, width, midwidth, minHeight, maxHeight, mask){
   image(Sock, 0, 0);
 }
 
-function distort(sourceImage, amount, scale){
+function distort(sourceImage, amount, scale, mask, blendmode){
   //default amount 100, scale 0.01
+  let time = new Date;
+  time = time.getMilliseconds();
+  noiseSeed(time);
   let vectorField = [];
   for (x = 0; x < sourceImage.width; x++){
     let row = [];
     for (y = 0; y < sourceImage.height; y++){
-      let vector = createVector(amount*(noise(scale*x,scale*y)-0.5), 4*amount*(noise(100+scale*x,scale*y)-0.5))
+      let vector = createVector(amount*(noise(scale*x,scale*y)-0.5), 4*amount*(noise(100+scale*x,scale*y)-0.5));
       row.push(vector);
     }
     vectorField.push(row);
@@ -169,39 +173,48 @@ function distort(sourceImage, amount, scale){
     }
   }
 
+  let distortImage = createImage(sourceImage.width, sourceImage.height);
+  distortImage.loadPixels();
+
+  for (x = 0; x<sourceImage.width; x++){
+    for (y= 0; y<sourceImage.height; y++){
+      let clear_i = y * sourceImage.width + x * 4;
+      distortImage.pixels[clear_i] = 0;
+      distortImage.pixels[clear_i + 1] = 0;
+      distortImage.pixels[clear_i + 2] = 0;
+      distortImage.pixels[clear_i + 3] = 0;
+    }
+  }
+  distortImage.updatePixels();
+  distortImage.loadPixels();
+
   for (n=0; n<sourceImage.width; n++) {
     for(m=0; m<sourceImage.height; m++){
       let result_i = m * sourceImage.width + n;
       let target_i = result_i * 4;
 
       let col = result[result_i];
-      sourceImage.pixels[target_i] = red(col);
-      sourceImage.pixels[target_i + 1] = green(col);
-      sourceImage.pixels[target_i + 2] = blue(col);
-      sourceImage.pixels[target_i + 3] = alpha(col);
+      distortImage.pixels[target_i] = red(col);
+      distortImage.pixels[target_i + 1] = green(col);
+      distortImage.pixels[target_i + 2] = blue(col);
+      distortImage.pixels[target_i + 3] = alpha(col);
     }
   }
 
   
-  sourceImage.updatePixels();
-  let pi = 3.14159265359
-  //translate(size / 2, size / 2);
-  //rotate(3*pi/2);
-  //translate(-size / 2, -size / 2);
-  image(sourceImage, 0, 0, size, size);
-  //translate(size / 2, size / 2);
-  //rotate(pi/2);
-  //translate(-size / 2, -size / 2);
+  distortImage.updatePixels();
+  distortImage.mask(mask);
+  blend(distortImage, 0, 0, imgSize, imgSize, 0, 0, size, size, blendmode);
   //console.log('distort');
 }
 
 function createPet(){
   var genes = randomGenes(5);
-  console.log(genes)
+  //console.log(genes)
 
   //Base Color - tint to set color()
   if (genes[0] != 'A' || genes[1] != 'A'){
-    tint(50);
+    tint(100);
   } else {
     noTint();
   }
@@ -209,18 +222,18 @@ function createPet(){
 
   //Noise Under Tint  - makeNoise(scale, patch size)
   tint(200);
-  makeNoise(0.02, 1);
+  //makeNoise(0.02, 1);
 
   //Mane Base Color - tint to set color
   tint(75);
   image(mane, 0, 0, size, size);
 
   //Tint Over Mane - r, g, b, a, mode
-  makeTint(255, 0, 255, 0.5, OVERLAY);
+  //makeTint(255, 0, 255, 0.5, OVERLAY);
 
-  //Agouti
-  agouti.mask(maneless);
-  blend(agouti, 0, 0, imgSize, imgSize, 0, 0, size, size, MULTIPLY);
+  //Agouti - default amount 100, scale 0.001
+  distort(agouti, 100, 0.001, maneless, MULTIPLY);
+  blend(headstripe, 0, 0, imgSize, imgSize, 0, 0, size, size, MULTIPLY);
 
   //Socks - x, width, midpoint, minrandom, maxrandom, mask; tint to set color
   tint(255);
@@ -237,14 +250,12 @@ function createPet(){
   //Back right - 75 smallest, 270 largest
   makeSock(500, 85, 70, 75, 270, backright);
 
-
-  distort(test, 50, 0.01); //default amount 100, scale 0.01
-  
-
   //Eye - tint to set color
-  noTint();
+  tint(255, 250, 205);
   image(eye, 0, 0, size, size);
 
   //Lines
   image(lines, 0, 0, size, size);
+
+  console.log('done');
 }
