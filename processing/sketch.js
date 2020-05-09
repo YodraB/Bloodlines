@@ -12,6 +12,10 @@ function preload(){
   backleft = loadImage('images/Khundii_BackLeft.png');
   backright = loadImage('images/Khundii_BackRight.png');
   bluemask = loadImage('images/Khundii_BlueMask.png');
+  tips = loadImage('images/Khundii_Tips.png');
+  tipsmask = loadImage('images/Khundii_TipsMask.png');
+  reversetips = loadImage('images/Khundii_ReverseTips.png');
+  reversetipsmask = loadImage('images/Khundii_ReverseTipsMask.png');
   agouti = loadImage('images/Khundii_Agouti.png');
   headstripe = loadImage('images/Khundii_Agouti_Headstripe.png');
   maneless = loadImage('images/Khundii_Maneless.png');
@@ -77,10 +81,12 @@ function randomGenes(){
   var blue = ['B', 'y', 'b'];
   var extension = ['M', 'E', 'r', 'n'];
   var redPattern = ['P', 's', 'g'];
-  var domBlack = ['K', 'b', 'k']
+  var domBlack = ['K', 'b', 'k'];
+  var agoutiGen = ['Y', 'W', 't', 'a'];
+  var birdDilute = ['S', 'c', 'g', 's'];
   
 
-	for (i = 0; i < 16 * 2; i++){
+	for (i = 0; i < 31 * 2; i++){
     if (i == 0 || i == 1){
       geneList = redGround;
     } else if (i == 18 || i == 19) {
@@ -91,12 +97,17 @@ function randomGenes(){
       geneList = redPattern;
     } else if (i == 30 || i == 31){
       geneList = domBlack;
+    } else if (i == 40 || i == 41){
+      geneList = agoutiGen;
+    } else if (i == 44 || i == 45){
+      geneList = birdDilute;
     } else {
       geneList = ['A', 'a'];
     }
+    
 		genotype += randomPick(geneList);
   	}
-  	return genotype;
+    return genotype;
 }
 
 function noiseImageCreate(time, noiseScale, coeff){
@@ -133,12 +144,12 @@ function makeNoise(noiseScale, coeff, mask){
   
 }
 
-function makeTint(red, green, blue, alpha, mode){
+function makeTint(colorValue, alpha, mode){
   let tintImage = createImage(width, height);
   tintImage.loadPixels();
   for (let x = 0; x < tintImage.width; x++){
     for (let y = 0; y < tintImage.height; y++){
-      tintImage.set(x, y, color(red, green, blue, alpha * 255));
+      tintImage.set(x, y, color(red(colorValue), green(colorValue), blue(colorValue), alpha * 255));
     }
   }
   tintImage.updatePixels();
@@ -169,7 +180,7 @@ function makeSock(x, width, midwidth, minHeight, maxHeight, mask){
   image(Sock, 0, 0);
 }
 
-function distort(sourceImage, amount, scale, mask, blendmode){
+function distort(sourceImage, amount, scale, mask, blendmode, colorValue){
   //default amount 100, scale 0.01
   let time = new Date;
   time = time.getMilliseconds();
@@ -226,9 +237,9 @@ function distort(sourceImage, amount, scale, mask, blendmode){
       let target_i = result_i * 4;
 
       let col = result[result_i];
-      distortImage.pixels[target_i] = red(col);
-      distortImage.pixels[target_i + 1] = green(col);
-      distortImage.pixels[target_i + 2] = blue(col);
+      distortImage.pixels[target_i] = red(colorValue);
+      distortImage.pixels[target_i + 1] = green(colorValue);
+      distortImage.pixels[target_i + 2] = blue(colorValue);
       distortImage.pixels[target_i + 3] = alpha(col);
     }
   }
@@ -244,7 +255,10 @@ function createPet(){
   clear();
   background(204, 229, 255);
   var genes = randomGenes();
-  console.log(genes)
+  //for (i = 0; i < genes.length; i++){
+  //  console.log(i, genes[i]);
+  //}
+  console.log(genes);
 
   //PHAEOMMELANIN
 
@@ -342,28 +356,149 @@ function createPet(){
 
   //EUMELANIN
 
-  var blackColor = [0]
+  var blackColor = color(18);
+
+  //Brown
+  if (genes[38] == 'a' && genes[39] == 'a'){
+    blackColor = color(87, 45, 19);
+  }
+
+  //Liver (overrides brown)
+  if (genes[42] == 'a' && genes[43] == 'a'){
+    blackColor = color(173, 56, 43);
+  }
+
+  //Bird Dilute (Eumelanin)
+  var blackAlpha = 225;
+  if (genes[44] == 'S' || genes[45] == 'S'){
+    //nothing happens
+  } else if ((genes[44] == 'c' && genes[45] == 'g') || (genes[44] == 'g' && genes[45] == 'c')){
+    blackAlpha = 0.87 * 225; 
+  } else if (genes[44] == 'c' || genes[45] == 'c'){
+    blackAlpha = 0.75 * 225;
+  } else if (genes[44] == 'g' || genes[45] == 'g'){
+    blackAlpha = 0.5 * 225;
+  }
+  blackColor.setAlpha(blackAlpha);
 
   //Dominant black
   if (genes[30] == 'K' || genes[31] == 'K'){
     tint(blackColor);
-    //image(ground, 0, 0, size, size);
+    image(ground, 0, 0, size, size);
   }
 
   //Black patches
+  var blackPatches = false;
+  if (genes[32] == 'A' || genes[33] == 'A'){
+    blackPatches = true;
+  }
+
+  var blackPatchAmount = 0;
+  for (i = 0; i < 4; i+=2 ){
+    if (genes[i + 34] == 'a' && genes[i + 35] == 'a'){
+      blackPatchAmount += 1;
+    }
+  }
+
+  tint(blackColor);
+  if (blackPatches == true && blackPatchAmount == 1){
+    makeNoise(0.02, 0.8, ground);
+  } else if (blackPatches == true && blackPatchAmount == 2) {
+    makeNoise(0.02, 1, ground);
+  }
+
+  //Agouti - 40, 41
+  if (genes[40] == 'Y' || genes[41] == 'Y'){
+    distort(tips, 100, 0.001, tipsmask, NORMAL, blackColor);
+  } else if (genes[40] == 'W' || genes[41] == 'W'){
+    distort(agouti, 100, 0.001, maneless, NORMAL, blackColor);
+  } else if (genes[40] == 't' || genes[41] == 't'){
+    distort(reversetips, 100, 0.001, reversetipsmask, NORMAL, blackColor);
+  }
+
+  // ULTRASTRUCTURE
+
+  var blueColor = color(77, 210, 255);
+
+  //Grey
+  if (genes[46] == 'a' && genes[47] == 'a'){
+    //blueColor = color(177);
+  }
+
+  //Violet
+  if (genes[48] == 'a' && genes[49] == 'a'){
+    //blueColor = color(189, 189, 255);
+  } else if (genes[48] == 'a' || genes[49] == 'a'){
+    if (blueColor = color(77, 210, 255)){ //skyblue
+      //blueColor = color(144, 144, 255);
+    } else {
+      //blueColor = color(162, 162, 193);
+    }
+  }
+
+  //Clear
+  var blueOn = true;
+  if (genes[54] == 'a' && genes[55] == 'a'){
+    blueOn = false;
+  }
+
+  //Bird dilute
+  var blueAlpha = 0.5;
+  if (genes[44] == 'S' || genes[45] == 'S'){
+    //nothing happens
+  } else if ((genes[44] == 'c' && genes[45] == 'g') || (genes[44] == 'g' && genes[45] == 'c')){
+    //blueAlpha *= 0.4; 
+  } else if (genes[44] == 'c' || genes[45] == 'c'){
+    //blueAlpha *= 0.9;
+  } else if (genes[44] == 'g' || genes[45] == 'g'){
+    //blackAlpha *= 0.5;
+  } else {
+    //blueAlpha *= 0.1;
+  }
+
+  //Base blue here
+  if (blueOn){
+    //makeTint(blueColor, blueAlpha, HARD_LIGHT);
+  }
+
+  //Dark
+  var realBlack = color(0);
+  if (genes[50] == 'A' && genes[51]== 'A'){
+    //makeTint(realBlack, 0.25, MULTIPLY);
+  } else if (genes[50] == 'A' || genes[51] == 'A'){
+    //makeTint(realBlack, 0.12, MULTIPLY);
+  }
+
+  //Anthracite
+  if (genes[52] == 'A' && genes[53] == 'A'){
+    //makeTint(realBlack, 0.75, MULTIPLY);
+  } else if (genes[52] == 'A' || genes[53] == 'A'){
+    //makeTint(realBlack, 0.37, MULTIPLY);
+  }
   
+  //WHITE
+  tint(255);
 
-  //Noise Under Tint  - makeNoise(scale, patch size)
-  //tint(200);
-  //makeNoise(0.02, 1);
+  //Tobiano
+  if (genes[56] == 'a' && genes[57] == 'a'){
+    makeNoise(0.008, 1, ground);
+  }
+  
+  //Overo
+  if (genes[58] == 'a' && genes[59] == 'a'){
+    makeNoise(0.05, 0.8, ground);
+  }
+  
+  //Dilute
+  if (genes[60] == 'a' && genes[61] == 'a'){
+    makeTint(color(255), 0.7, SCREEN);
+  }
+  
+  //Mane
+  tint(0);
+  image(mane, 0, 0, size, size);
 
-  //Mane Base Color - tint to set color
-  //tint(75);
-  //image(mane, 0, 0, size, size);
-
-  //Tint Over Mane - r, g, b, a, mode
-  //makeTint(255, 0, 255, 0.5, OVERLAY);
-
+  
   //Agouti - default amount 100, scale 0.001
   //distort(agouti, 100, 0.001, maneless, MULTIPLY);
   //blend(headstripe, 0, 0, imgSize, imgSize, 0, 0, size, size, MULTIPLY);
