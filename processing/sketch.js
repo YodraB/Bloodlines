@@ -136,10 +136,9 @@ function makeSock(x, width, midwidth, minHeight, maxHeight, mask){
   image(Sock, 0, 0);
 }
 
-function distort(sourceImage){
+function distort(sourceImage, amount, scale){
+  //default amount 100, scale 0.01
   let vectorField = [];
-  var amount = 100;
-  var scale = 0.01;
   for (x = 0; x < sourceImage.width; x++){
     let row = [];
     for (y = 0; y < sourceImage.height; y++){
@@ -148,43 +147,52 @@ function distort(sourceImage){
     }
     vectorField.push(row);
   }
-  
-  //console.log('x')
 
-  var result = [];
+  let result = [];
   sourceImage.loadPixels();
-  for (i = 0; i < sourceImage.width; i++){ //sourceImage.width
-    for (j = 0; j < sourceImage.height; j += 4){ //sourceImage.height
+  for (j = 0; j < sourceImage.width; j++){
+    for (i = 0; i < sourceImage.height; i ++){
       var res = vectorField[i][j];
-      //console.log(res);
 
-      var ii = constrain(floor(j + res.x), 0, sourceImage.width - 1);
+      var ii = constrain(floor(i + res.x), 0, sourceImage.width - 1);
       var jj = constrain(floor(j + res.y), 0, sourceImage.height - 1);
-      //console.log(ii, jj);
+
+      let source_i = (jj * sourceImage.width + ii) * 4
+      let col = color(
+        sourceImage.pixels[source_i],
+        sourceImage.pixels[source_i + 1],
+        sourceImage.pixels[source_i + 2],
+        sourceImage.pixels[source_i + 3]
+      );
       
-      result[i * sourceImage.width + j] = color(0, sourceImage.pixels[ii * sourceImage.width + jj + 1], sourceImage.pixels[ii * sourceImage.width + jj + 2], sourceImage.pixels[ii * sourceImage.width + jj + 3]);
+      result.push(col);
     }
   }
-  //console.log(result)
-  //console.log(sourceImage.pixels[0 + sourceImage.width * 0])
 
   for (n=0; n<sourceImage.width; n++) {
     for(m=0; m<sourceImage.height; m++){
-      index = (n * sourceImage.width + m) * 4;
-      if (index >= 4194300){
-        index = 4194300;
-      }
-      sourceImage.pixels[index] = red(result[index]);
-      sourceImage.pixels[index + 1] = green(result[index]);
-      sourceImage.pixels[index + 2] = blue(result[index]);
-      sourceImage.pixels[index + 3] = alpha(result[index]);
+      let result_i = m * sourceImage.width + n;
+      let target_i = result_i * 4;
+
+      let col = result[result_i];
+      sourceImage.pixels[target_i] = red(col);
+      sourceImage.pixels[target_i + 1] = green(col);
+      sourceImage.pixels[target_i + 2] = blue(col);
+      sourceImage.pixels[target_i + 3] = alpha(col);
     }
   }
 
   
   sourceImage.updatePixels();
+  let pi = 3.14159265359
+  //translate(size / 2, size / 2);
+  //rotate(3*pi/2);
+  //translate(-size / 2, -size / 2);
   image(sourceImage, 0, 0, size, size);
-  console.log('distort');
+  //translate(size / 2, size / 2);
+  //rotate(pi/2);
+  //translate(-size / 2, -size / 2);
+  //console.log('distort');
 }
 
 function createPet(){
@@ -230,7 +238,7 @@ function createPet(){
   makeSock(500, 85, 70, 75, 270, backright);
 
 
-  distort(test);
+  distort(test, 50, 0.01); //default amount 100, scale 0.01
   
 
   //Eye - tint to set color
