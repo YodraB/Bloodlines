@@ -1,8 +1,12 @@
 let ground;
 let eye;
 let lines;
-var rectOver = false;
+var newOver = false;
+var codeOver = false;
+var saveOver = false;
 let imgSize = 2048;
+let inputBox;
+let textBox;
 
 function preload(){
   ground = loadImage('images/Khundii_Base.png');
@@ -27,14 +31,22 @@ function preload(){
 
 function setup() {
   // put setup code here
-  size = 700;
+  size = 650;
 	createCanvas(size, size);
   background(204, 229, 255);
   textAlign(CENTER, CENTER);
 
   image(ground, 0, 0, size, size);
+  createElement('br');
+  inputBox = createInput('Code Here');
+  inputBox.input(myInputEvent);
+  textBox = createElement('p');
   
   image(lines, 0, 0, size, size);
+}
+
+function myInputEvent(){
+  console.log(this.value());
 }
 
 function draw() {
@@ -42,25 +54,51 @@ function draw() {
   fill(255);
   rect(40, 40, 100, 30);
   fill(0);
-  text('new pet', 100/2 + 40, 30/2 + 40);
+  text('random pet', 100/2 + 40, 30/2 + 40);
+
+  fill(255);
+  rect(230, 40, 100, 30);
+  fill(0);
+  text('code pet', 100/2 + 230, 30/2 + 40);
+
+  fill(255);
+  rect(350, 40, 100, 30);
+  fill(0);
+  text('save pet', 100/2 + 350, 30/2 + 40);
 
   if (mouseX >= 40 && mouseX <= 40 + 100 &&
     mouseY >= 40 && mouseY <= 40 + 30){
       //checks if mouse is over button
-      rectOver = true;
+      newOver = true;
   } else {
-    rectOver = false;
+    newOver = false;
   }
-  //makeShape(350, 350);
+
+  if (mouseX >= 230 && mouseX <= 230 + 100 &&
+    mouseY >= 40 && mouseY <= 40 + 30){
+      //checks if mouse is over button
+      codeOver = true;
+  } else {
+    codeOver = false;
+  }
+
+  if (mouseX >= 350 && mouseX <= 350 + 100 &&
+    mouseY >= 40 && mouseY <= 40 + 30){
+      //checks if mouse is over button
+      saveOver = true;
+  } else {
+    saveOver = false;
+  }
 }
 
 function mousePressed() {
   //if mouse is over button when mouse is pressed, button is pressed
-  if (rectOver) {
-    console.log('loading');
-    //var genes = randomGenes();
-    //console.log(genes)
-    createPet();
+  if (newOver) {
+    createPet('random');
+  } else if (codeOver) {
+    createPet('code');
+  } else if (saveOver){
+    saveCanvas('Khundii', 'png');
   }
 }
 
@@ -251,16 +289,22 @@ function distort(sourceImage, amount, scale, mask, blendmode, colorValue){
   //console.log('distort');
 }
 
-function createPet(){
+function createPet(petValue){
   clear();
   background(204, 229, 255);
-  var genes = randomGenes();
+  var genes = '';
+  if (petValue == 'random'){
+    genes = randomGenes();
+  } else {
+    genes = inputBox.value();
+  }
+  textBox.html(genes);
   //for (i = 0; i < genes.length; i++){
   //  console.log(i, genes[i]);
   //}
   console.log(genes);
 
-  //PHAEOMMELANIN
+  //PHAEOMELANIN
 
   //Blue gene
   var blueMaskVar = ground;
