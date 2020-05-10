@@ -23,6 +23,14 @@ function preload(){
   agouti = loadImage('images/Khundii_Agouti.png');
   headstripe = loadImage('images/Khundii_Agouti_Headstripe.png');
   maneless = loadImage('images/Khundii_Maneless.png');
+  star = loadImage('images/Khundii_Star.png');
+  stripe = loadImage('images/Khundii_Stripe.png');
+  blaze = loadImage('images/Khundii_Blaze.png');
+  bald = loadImage('images/Khundii_Bald.png');
+  starmask = loadImage('images/Khundii_StarMask.png');
+  stripemask = loadImage('images/Khundii_StripeMask.png');
+  blazemask = loadImage('images/Khundii_BlazeMask.png');
+  baldmask = loadImage('Images/Khundii_BaldMask.png');
   mane = loadImage('images/Khundii_Mane.png');
   eye = loadImage('images/Khundii_Eye.png');
   lines = loadImage('images/Khundii_Line.png');
@@ -312,16 +320,43 @@ function createPet(petValue){
   //}
   console.log(genes);
 
+  //Gene assignment
+  var groundColorGenes = genes[0] + genes[1];
+  var groundRecGenes = genes.slice(2, 10);
+  var redPatchGenes = genes[10] + genes[11];
+  var redPatchAmountGenes = genes.slice(12, 18)
+  var blueGenes = genes[18] + genes[19];
+  var extensionGenes = genes[20] + genes[21];
+  var redPatternGenes = genes[22] + genes[23];
+  var bandingGenes = genes[24] + genes[25];
+  var bandingAmountGenes = genes.slice(26, 30);
+  var domBlackGenes = genes[30] + genes[31];
+  var blackPatchGenes = genes[32] + genes[33];
+  var blackPatchAmountGenes = genes.slice(34, 38);
+  var brownGenes = genes[38] + genes[39];
+  var agoutiGenes = genes[40] + genes[41];
+  var liverGenes = genes[42] + genes[43];
+  var birdDiluteGenes = genes[44] + genes[45];
+  var greyGenes = genes[46] + genes[47];
+  var violetGenes = genes[48] + genes[49];
+  var darkGenes = genes[50] + genes[51];
+  var anthraciteGenes = genes[52] + genes[53];
+  var clearGenes = genes[54] + genes[55];
+  var tobianoGenes = genes[56] + genes[57];
+  var overoGenes = genes[58] + genes[59];
+  var diluteGenes = genes[60] + genes[61];
+  console.log(greyGenes, violetGenes)
+
   //PHAEOMELANIN
 
   //Blue gene
   var blueMaskVar = ground;
   var redOn = true;
-  if ((genes[18] == 'y' || genes[19] == 'y') && (genes[18] != 'B' && genes[19] != 'B')){
+  if ((blueGenes[0] == 'y' || blueGenes[1] == 'y') && (blueGenes[0] != 'B' && blueGenes[1] != 'B')){
     noTint();
     image(ground, 0, 0, size, size);
     blueMaskVar = bluemask;
-  } else if (genes[18] == 'b' && genes[19] == 'b'){
+  } else if (blueGenes[0] == 'b' && blueGenes[1] == 'b'){
     noTint();
     image(ground, 0, 0, size, size);
     redOn = false;
@@ -332,17 +367,17 @@ function createPet(petValue){
 
   //Base Color - tint to set color()
   var groundColor = '';
-  if (genes[0] == 'R' || genes[1] == 'R'){
+  if (groundColorGenes[0] == 'R' || groundColorGenes[1] == 'R'){
     groundColor = 'red';
-  } else if (genes[0] == 'P' || genes[1] == 'P'){
+  } else if (groundColorGenes[0] == 'P' || groundColorGenes[1] == 'P'){
     groundColor = 'pink';
   } else {
     groundColor = 'white';
   }
 
   var groundRec = 0;
-  for (i = 0; i < 8; i+=2 ){
-    if (genes[i + 2] != 'A' && genes[i + 3] != 'A'){
+  for (i = 0; i < groundRecGenes.length; i+= 2 ){
+    if (groundRecGenes[i] != 'A' && groundRecGenes[i + 1] != 'A'){
       groundRec += 1;
     }
   }
@@ -379,13 +414,13 @@ function createPet(petValue){
 
   //Red Patches
   var redPatches = false;
-  if (genes[10] == 'A' || genes[11] == 'A'){
+  if (redPatchGenes[0] == 'A' || redPatchGenes[1] == 'A'){
     redPatches = true;
   }
 
   var redPatchAmount = 0;
-  for (i = 0; i < 6; i+=2 ){
-    if (genes[i + 12] == 'a' && genes[i + 13] == 'a'){
+  for (i = 0; i < redPatchAmountGenes.length; i+=2 ){
+    if (redPatchAmountGenes[i] == 'a' && redPatchAmountGenes[i + 1] == 'a'){
       redPatchAmount += 1;
     }
   }
@@ -411,43 +446,43 @@ function createPet(petValue){
   var blackColor = color(18);
 
   //Brown
-  if (genes[38] == 'a' && genes[39] == 'a'){
+  if (brownGenes[0] == 'a' && brownGenes[1] == 'a'){
     blackColor = color(87, 45, 19);
   }
 
   //Liver (overrides brown)
-  if (genes[42] == 'a' && genes[43] == 'a'){
+  if (liverGenes[0] == 'a' && liverGenes[1] == 'a'){
     blackColor = color(173, 56, 43);
   }
 
   //Bird Dilute (Eumelanin)
   var blackAlpha = 225;
-  if (genes[44] == 'S' || genes[45] == 'S'){
+  if (birdDiluteGenes[0] == 'S' || birdDiluteGenes[1] == 'S'){
     //nothing happens
-  } else if ((genes[44] == 'c' && genes[45] == 'g') || (genes[44] == 'g' && genes[45] == 'c')){
+  } else if (birdDiluteGenes == 'cg' || birdDiluteGenes == 'gc'){
     blackAlpha = 0.87 * 225; 
-  } else if (genes[44] == 'c' || genes[45] == 'c'){
+  } else if (birdDiluteGenes[0] == 'c' || birdDiluteGenes[1] == 'c'){
     blackAlpha = 0.75 * 225;
-  } else if (genes[44] == 'g' || genes[45] == 'g'){
+  } else if (birdDiluteGenes[0] == 'g' || birdDiluteGenes[1] == 'g'){
     blackAlpha = 0.5 * 225;
   }
   blackColor.setAlpha(blackAlpha);
 
   //Dominant black
-  if (genes[30] == 'K' || genes[31] == 'K'){
+  if (domBlackGenes[0] == 'K' || domBlackGenes[1] == 'K'){
     tint(blackColor);
     image(ground, 0, 0, size, size);
   }
 
   //Black patches
   var blackPatches = false;
-  if (genes[32] == 'A' || genes[33] == 'A'){
+  if (blackPatchGenes[0] == 'A' || blackPatchGenes[1] == 'A'){
     blackPatches = true;
   }
 
   var blackPatchAmount = 0;
-  for (i = 0; i < 4; i+=2 ){
-    if (genes[i + 34] == 'a' && genes[i + 35] == 'a'){
+  for (i = 0; i < blackPatchAmountGenes.length; i+=2 ){
+    if (blackPatchAmountGenes[i] == 'a' && blackPatchAmountGenes[i + 1] == 'a'){
       blackPatchAmount += 1;
     }
   }
@@ -460,13 +495,13 @@ function createPet(petValue){
   }
 
   //Agouti - 40, 41
-  if (genes[40] == 'Y' || genes[41] == 'Y'){
+  if (agoutiGenes[0] == 'Y' || agoutiGenes[1] == 'Y'){
     distort(tips, 100, 0.001, tipsmask, NORMAL, blackColor);
-  } else if (genes[40] == 'W' || genes[41] == 'W'){
+  } else if (agoutiGenes[0] == 'W' || agoutiGenes[1] == 'W'){
     distort(agouti, 100, 0.001, maneless, NORMAL, blackColor);
     tint(blackColor);
     image(headstripe, 0, 0, size, size);
-  } else if (genes[40] == 't' || genes[41] == 't'){
+  } else if (agoutiGenes[0] == 't' || agoutiGenes[1] == 't'){
     distort(reversetips, 100, 0.001, reversetipsmask, NORMAL, blackColor);
   }
 
@@ -475,14 +510,14 @@ function createPet(petValue){
   var blueColor = color(77, 210, 255);
 
   //Grey
-  if (genes[46] == 'a' && genes[47] == 'a'){
+  if (greyGenes[0] == 'a' && greyGenes[1] == 'a'){
     //blueColor = color(177);
   }
 
   //Violet
-  if (genes[48] == 'a' && genes[49] == 'a'){
+  if (violetGenes[0] == 'a' && violetGenes[1] == 'a'){
     //blueColor = color(189, 189, 255);
-  } else if (genes[48] == 'a' || genes[49] == 'a'){
+  } else if (violetGenes[0] == 'a' || violetGenes[1] == 'a'){
     if (blueColor = color(77, 210, 255)){ //skyblue
       //blueColor = color(144, 144, 255);
     } else {
@@ -492,7 +527,7 @@ function createPet(petValue){
 
   //Clear
   var blueOn = true;
-  if (genes[54] == 'a' && genes[55] == 'a'){
+  if (clearGenes[0] == 'a' && clearGenes[1] == 'a'){
     blueOn = false;
   }
 
@@ -517,16 +552,16 @@ function createPet(petValue){
 
   //Dark
   var realBlack = color(0);
-  if (genes[50] == 'A' && genes[51]== 'A'){
+  if (darkGenes[0] == 'A' && darkGenes[1] == 'A'){
     //makeTint(realBlack, 0.25, MULTIPLY);
-  } else if (genes[50] == 'A' || genes[51] == 'A'){
+  } else if (darkGenes[0] == 'A' || darkGenes[1] == 'A'){
     //makeTint(realBlack, 0.12, MULTIPLY);
   }
 
   //Anthracite
-  if (genes[52] == 'A' && genes[53] == 'A'){
+  if (anthraciteGenes[0] == 'A' && anthraciteGenes[1] == 'A'){
     //makeTint(realBlack, 0.75, MULTIPLY);
-  } else if (genes[52] == 'A' || genes[53] == 'A'){
+  } else if (anthraciteGenes[0] == 'A' || anthraciteGenes[1] == 'A'){
     //makeTint(realBlack, 0.37, MULTIPLY);
   }
   
@@ -534,19 +569,26 @@ function createPet(petValue){
   tint(255);
 
   //Tobiano
-  if (genes[56] == 'a' && genes[57] == 'a'){
+  if (tobianoGenes[0] == 'a' && tobianoGenes[1] == 'a'){
     makeNoise(0.008, 1, ground);
   }
   
   //Overo
-  if (genes[58] == 'a' && genes[59] == 'a'){
+  if (overoGenes[0] == 'a' && overoGenes[1] == 'a'){
     makeNoise(0.05, 0.8, ground);
   }
   
   //Dilute
-  if (genes[60] == 'a' && genes[61] == 'a'){
+  if (diluteGenes[0] == 'a' && diluteGenes[1] == 'a'){
     makeTint(color(255), 0.7, SCREEN);
   }
+
+  //Face White
+
+  //distort(star, 50, 0.02, starmask, NORMAL, color(255));
+  //distort(stripe, 25, 0.02, stripemask, NORMAL, color(255));
+  //distort(blaze, 25, 0.01, blazemask, NORMAL, color(255));
+  //distort(bald, 50, 0.02, baldmask, NORMAL, color(255));
   
   //Mane
   tint(0);
