@@ -602,7 +602,6 @@ function createPet(petValue){
   } else if (whiteFaceAmount == 4){
     distort(bald, 50, 0.02, baldmask, NORMAL, color(255));
   }
-  distort(bald, 50, 0.02, baldmask, NORMAL, color(255));
   
   //Mane
   tint(0);
