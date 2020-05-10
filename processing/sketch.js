@@ -31,7 +31,7 @@ function preload(){
 
 function setup() {
   // put setup code here
-  size = 650;
+  size = 600;
 	createCanvas(size, size);
   background(204, 229, 255);
   textAlign(CENTER, CENTER);
@@ -41,8 +41,20 @@ function setup() {
   inputBox = createInput('Code Here');
   inputBox.input(myInputEvent);
   textBox = createElement('p');
+  randomButton = createButton('random pet');
+  randomButton.mousePressed(randompress);
+  codeButton = createButton('code pet');
+  codeButton.mousePressed(codepress);
   
   image(lines, 0, 0, size, size);
+}
+
+function randompress() {
+  createPet('random');
+}
+
+function codepress() {
+  createPet('code');
 }
 
 function myInputEvent(){
@@ -51,20 +63,20 @@ function myInputEvent(){
 
 function draw() {
   // put drawing code here
-  fill(255);
-  rect(40, 40, 100, 30);
-  fill(0);
-  text('random pet', 100/2 + 40, 30/2 + 40);
+  //fill(255);
+  //rect(40, 40, 100, 30);
+  //fill(0);
+  //text('random pet', 100/2 + 40, 30/2 + 40);
 
-  fill(255);
-  rect(230, 40, 100, 30);
-  fill(0);
-  text('code pet', 100/2 + 230, 30/2 + 40);
+  //fill(255);
+  //rect(230, 40, 100, 30);
+  //fill(0);
+  //text('code pet', 100/2 + 230, 30/2 + 40);
 
-  fill(255);
-  rect(350, 40, 100, 30);
-  fill(0);
-  text('save pet', 100/2 + 350, 30/2 + 40);
+  //fill(255);
+  //rect(350, 40, 100, 30);
+  //fill(0);
+  //text('save pet', 100/2 + 350, 30/2 + 40);
 
   if (mouseX >= 40 && mouseX <= 40 + 100 &&
     mouseY >= 40 && mouseY <= 40 + 30){
@@ -94,17 +106,13 @@ function draw() {
 function mousePressed() {
   //if mouse is over button when mouse is pressed, button is pressed
   if (newOver) {
-    createPet('random');
+    //createPet('random');
   } else if (codeOver) {
-    createPet('code');
+    //createPet('code');
   } else if (saveOver){
-    saveCanvas('Khundii', 'png');
+    //saveCanvas('Khundii', 'png');
   }
 }
-
-//function touchEnded(){
-//	createPet();
-//}
 
 function randomPick(array) {
 	var randomNumber = Math.floor(Math.random() * (array.length));
@@ -456,6 +464,8 @@ function createPet(petValue){
     distort(tips, 100, 0.001, tipsmask, NORMAL, blackColor);
   } else if (genes[40] == 'W' || genes[41] == 'W'){
     distort(agouti, 100, 0.001, maneless, NORMAL, blackColor);
+    tint(blackColor);
+    image(headstripe, 0, 0, size, size);
   } else if (genes[40] == 't' || genes[41] == 't'){
     distort(reversetips, 100, 0.001, reversetipsmask, NORMAL, blackColor);
   }
