@@ -32,7 +32,7 @@ function preload(){
   starmask = loadImage('images/Khundii_StarMask.png');
   stripemask = loadImage('images/Khundii_StripeMask.png');
   blazemask = loadImage('images/Khundii_BlazeMask.png');
-  baldmask = loadImage('Images/Khundii_BaldMask.png');
+  baldmask = loadImage('images/Khundii_BaldMask.png');
   mane = loadImage('images/Khundii_Mane.png');
   eye = loadImage('images/Khundii_Eye.png');
   lines = loadImage('images/Khundii_Line.png');
@@ -602,6 +602,7 @@ function createPet(petValue){
   } else if (whiteFaceAmount == 4){
     distort(bald, 50, 0.02, baldmask, NORMAL, color(255));
   }
+  distort(bald, 50, 0.02, baldmask, NORMAL, color(255));
   
   //Mane
   tint(0);
