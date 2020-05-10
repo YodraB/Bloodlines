@@ -16,6 +16,8 @@ function preload(){
   backleft = loadImage('images/Khundii_BackLeft.png');
   backright = loadImage('images/Khundii_BackRight.png');
   bluemask = loadImage('images/Khundii_BlueMask.png');
+  extension = loadImage('images/Khundii_Extension.png');
+  exmask = loadImage('images/Khundii_ExMask.png');
   tips = loadImage('images/Khundii_Tips.png');
   tipsmask = loadImage('images/Khundii_TipsMask.png');
   reversetips = loadImage('images/Khundii_ReverseTips.png');
@@ -133,7 +135,7 @@ function randomGenes(){
   
   var redGround = ['R', 'P', 'r'];
   var blue = ['B', 'y', 'b'];
-  var extension = ['M', 'E', 'r', 'n'];
+  var extension = ['M', 'E', 'r'];
   var domBlack = ['K', 'b', 'k'];
   var agoutiGen = ['Y', 'W', 't', 'a'];
   var birdDilute = ['S', 'c', 'g', 's'];
@@ -291,7 +293,7 @@ function distort(sourceImage, amount, scale, mask, blendmode, colorValue){
       distortImage.pixels[target_i] = red(colorValue);
       distortImage.pixels[target_i + 1] = green(colorValue);
       distortImage.pixels[target_i + 2] = blue(colorValue);
-      distortImage.pixels[target_i + 3] = alpha(col);
+      distortImage.pixels[target_i + 3] = alpha(col) - (255 - alpha(colorValue));
     }
   }
 
@@ -431,10 +433,6 @@ function createPet(petValue){
     }
   }
 
-  //Red pattern
-
-  //Banding
-
   //EUMELANIN
 
   var blackColor = color(18);
@@ -454,15 +452,23 @@ function createPet(petValue){
   if (birdDiluteGenes[0] == 'S' || birdDiluteGenes[1] == 'S'){
     //nothing happens
   } else if (birdDiluteGenes == 'cg' || birdDiluteGenes == 'gc'){
-    blackAlpha = 0.87 * 225; 
+    blackAlpha -= 0.87 * 225; 
   } else if (birdDiluteGenes[0] == 'c' || birdDiluteGenes[1] == 'c'){
-    blackAlpha = 0.75 * 225;
+    blackAlpha -= 0.75 * 225;
   } else if (birdDiluteGenes[0] == 'g' || birdDiluteGenes[1] == 'g'){
-    blackAlpha = 0.5 * 225;
+    blackAlpha -= 0.5 * 225;
   }
+
   blackColor.setAlpha(blackAlpha);
 
   //Extension
+  if (extensionGenes[0] == 'M' || extensionGenes[1] == 'M'){
+    distort(extension, 100, 0.003, exmask, NORMAL, blackColor);
+  } else if (extensionGenes[0] == 'r' && extensionGenes[1] == 'r'){
+    blackAlpha = 0;
+  }
+
+  blackColor.setAlpha(blackAlpha);
 
   //Dominant black
   if (domBlackGenes[0] == 'K' || domBlackGenes[1] == 'K'){
