@@ -142,7 +142,7 @@ function randomGenes(){
   var birdDilute = ['S', 'c', 'g', 's'];
   
 
-	for (i = 0; i < 82; i++){
+	for (i = 0; i < 81; i++){
     if (i == 0 || i == 1){
       geneList = redGround;
     } else if (i == 18 || i == 19) {
@@ -213,19 +213,22 @@ function makeTint(colorValue, alpha, mode){
 
 function makeSock(x, width, midwidth, minHeight, maxHeight, mask){
   var height = random(minHeight, maxHeight)
+  var variance = random(-50, 50);
+  var y = size - 25;
+  //console.log(variance);
   sockGraphic = createGraphics(size, size);
   sockGraphic.noStroke();
   sockGraphic.fill(255, 255, 255);
   sockGraphic.beginShape();
-  sockGraphic.vertex(x, 675);
-  sockGraphic.vertex(x + width, 675,);
-  sockGraphic.vertex(x + width, 675 - height);
-  if (mask == backleft && height > 155){
-    sockGraphic.bezierVertex(x + width, 675 - height, x + midwidth, 675 - (height + 50), x, 675 - (height + random(-50, 50) - 80));
-  } else if (mask == backright){
-    sockGraphic.bezierVertex(x + width, 675 - height, x + midwidth, 675 - (height + 50), x, 675 - (height + random(-50, 50) - 80));
+  sockGraphic.vertex(x, y);
+  sockGraphic.vertex(x + width, y);
+  sockGraphic.vertex(x + width, y - height);
+  if (mask == backleft && height > 140){
+    sockGraphic.bezierVertex(x + width, y - height, x + midwidth, y - (height + 50), x, y - (height + variance - 80));
+  } else if (mask == backright && height > 30){
+    sockGraphic.bezierVertex(x + width, y - height, x + midwidth, y - (height + 50), x, y - (height + variance - 80));
   } else {
-    sockGraphic.bezierVertex(x + width, 675 - height, x + midwidth, 675 - (height + 50), x, 675 - (height + random(-50, 50)));
+    sockGraphic.bezierVertex(x + width, y - height, x + midwidth, y - (height + 50), x, y - (height + variance));
   }
   sockGraphic.endShape();
   var Sock = createImage(size, size);
@@ -343,13 +346,11 @@ function createPet(petValue){
   var overoGenes = genes[50] + genes[51];
   var diluteGenes = genes[52] + genes[53];
   var whiteFaceGenes = genes.slice(54, 62);
-  var frontLeftSockGenes = 'aaaa';//genes.slice(62, 66);
+  var frontLeftSockGenes = genes.slice(62, 66);
   var frontRightSockGenes = genes.slice(66, 70);
   var backLeftSockGenes = genes.slice(70, 74);
   var backRightSockGenes = genes.slice(74, 78);
-  var sockHeightGenes = genes.slice(78, 82);
-  console.log(frontLeftSockGenes);
-  console.log(sockHeightGenes);
+  var sockHeightGenes = genes[79] + genes[80];
 
   //PHAEOMELANIN
 
@@ -625,38 +626,57 @@ function createPet(petValue){
   var sockHeightMin = 0;
   var sockHeightMax = 0;
   if (sockHeightNum == 0){
-    sockHeightMin = 30;
+    sockHeightMin = 15;
+    sockHeightMax = 50;
   } else if (sockHeightNum == 1){
-  	
+    sockHeightMin = 50;
+  	sockHeightMax = 130;
   } else if (sockHeightNum == 2){
-  	
-  } else if (sockHeightNum == 3){
-  	
-  } else {
-  	sockHeightMax == 220;
+    sockHeightMin = 130;
+  	sockHeightMax = 200;
   }
-  sockHeight = 30
-  console.log(sockHeight)
+  console.log(sockHeightNum)
 
-  //Front left - 30 smallest, 300 largest
+  //Front left - 15 smallest, 200 largest
   if (frontLeftSockGenes == 'aaaa'){
-  	makeSock(100, 135, 40, 100, 100, frontleft);
+  	makeSock(100, 135, 40, sockHeightMin, sockHeightMax, frontleft);
   }
-  
+
+  //Back left - 30 smallest, 270 largest
+  if (backLeftSockGenes == 'aaaa'){
+    if (sockHeightNum == 2){
+      makeSock(320, 130, 87, sockHeightMin + 30, sockHeightMax + 50, backleft);
+    } else if (sockHeightNum == 1) {
+      makeSock(320, 130, 87, sockHeightMin, sockHeightMax + 40, backleft);
+    } else {
+      makeSock(320, 130, 87, sockHeightMin, sockHeightMax, backleft);
+    }
+  }
+
+  //Front right - 40 smallest, 220 largest
+  if (frontRightSockGenes == 'aaaa'){
+    if (sockHeightNum == 0){
+      makeSock(100, 85, 40, sockHeightMin + 40, sockHeightMax, back);
+    } else {
+      makeSock(100, 85, 40, sockHeightMin, sockHeightMax, back);
+    }
+  }
+
+  //Back right - 75 smallest, 270 largest
+  if (backRightSockGenes == 'aaaa'){
+    if (sockHeightNum == 2){
+      makeSock(420, 85, 70, sockHeightMin + 30, sockHeightMax + 50, backright);
+    } else if (sockHeightNum == 1){
+      makeSock(420, 85, 70, sockHeightMin, sockHeightMax + 40, backright);
+    } else {
+      makeSock(420, 85, 70, sockHeightMin, sockHeightMax, backright);
+    }
+  }
   
   
   //Mane
   tint(0);
   image(mane, 0, 0, size, size);
-
-
-
-
-  //Back left - 30 smallest, 270 largest
-  //makeSock(350, 175, 180, 160, 270, backleft);
-
-  //Front right - 40 smallest, 220 largest
-  //makeSock(100, 85, 40, 40, 40, back);
 
   //Back right - 75 smallest, 270 largest
   //makeSock(500, 85, 70, 75, 270, backright);
