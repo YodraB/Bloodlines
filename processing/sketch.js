@@ -339,8 +339,8 @@ function createPet(petValue){
   var birdDiluteGenes = genes[36] + genes[37];
   var greyGenes = genes[38] + genes[39];
   var violetGenes = genes[40] + genes[41];
-  var darkGenes = genes[42] + genes[43];
-  var anthraciteGenes = genes[44] + genes[45];
+  var darkGenes = 'aa'; //genes[42] + genes[43];
+  var anthraciteGenes = 'aa'; //genes[44] + genes[45];
   var clearGenes = genes[46] + genes[47];
   var tobianoGenes = genes[48] + genes[49];
   var overoGenes = genes[50] + genes[51];
@@ -544,13 +544,13 @@ function createPet(petValue){
 
   //Bird dilute
   var blueAlpha = 0.5;
-  if (genes[44] == 'S' || genes[45] == 'S'){
+  if (birdDiluteGenes[0] == 'S' || birdDiluteGenes[1] == 'S'){
     //nothing happens
-  } else if ((genes[44] == 'c' && genes[45] == 'g') || (genes[44] == 'g' && genes[45] == 'c')){
+  } else if ((birdDiluteGenes[0] == 'c' && birdDiluteGenes[1] == 'g') || (birdDiluteGenes[0] == 'g' && birdDiluteGenes[1] == 'c')){
     blueAlpha *= 0.4; 
-  } else if (genes[44] == 'c' || genes[45] == 'c'){
+  } else if (birdDiluteGenes[0] == 'c' || birdDiluteGenes[1] == 'c'){
     blueAlpha *= 0.9;
-  } else if (genes[44] == 'g' || genes[45] == 'g'){
+  } else if (birdDiluteGenes[0] == 'g' || birdDiluteGenes[1] == 'g'){
     blueAlpha *= 0.5;
   } else {
     blueAlpha *= 0.1;
@@ -558,7 +558,8 @@ function createPet(petValue){
 
   //Base blue here
   if (blueOn){
-    makeTint(blueColor, blueAlpha, HARD_LIGHT);
+    makeTint(blueColor, blueAlpha, NORMAL); //not normal
+    console.log('blue', blueColor, blueAlpha);
   }
 
   //Dark
