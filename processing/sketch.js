@@ -513,17 +513,17 @@ function createPet(petValue){
 
   //Grey
   if (greyGenes[0] == 'a' && greyGenes[1] == 'a'){
-    //blueColor = color(177);
+    blueColor = color(177);
   }
 
   //Violet
   if (violetGenes[0] == 'a' && violetGenes[1] == 'a'){
-    //blueColor = color(189, 189, 255);
+    blueColor = color(189, 189, 255);
   } else if (violetGenes[0] == 'a' || violetGenes[1] == 'a'){
     if (blueColor = color(77, 210, 255)){ //skyblue
-      //blueColor = color(144, 144, 255);
+      blueColor = color(144, 144, 255);
     } else {
-      //blueColor = color(162, 162, 193);
+      blueColor = color(162, 162, 193);
     }
   }
 
@@ -538,33 +538,33 @@ function createPet(petValue){
   if (genes[44] == 'S' || genes[45] == 'S'){
     //nothing happens
   } else if ((genes[44] == 'c' && genes[45] == 'g') || (genes[44] == 'g' && genes[45] == 'c')){
-    //blueAlpha *= 0.4; 
+    blueAlpha *= 0.4; 
   } else if (genes[44] == 'c' || genes[45] == 'c'){
-    //blueAlpha *= 0.9;
+    blueAlpha *= 0.9;
   } else if (genes[44] == 'g' || genes[45] == 'g'){
-    //blackAlpha *= 0.5;
+    blueAlpha *= 0.5;
   } else {
-    //blueAlpha *= 0.1;
+    blueAlpha *= 0.1;
   }
 
   //Base blue here
   if (blueOn){
-    //makeTint(blueColor, blueAlpha, HARD_LIGHT);
+    makeTint(blueColor, blueAlpha, HARD_LIGHT);
   }
 
   //Dark
   var realBlack = color(0);
   if (darkGenes[0] == 'A' && darkGenes[1] == 'A'){
-    //makeTint(realBlack, 0.25, MULTIPLY);
+    makeTint(realBlack, 0.25, MULTIPLY);
   } else if (darkGenes[0] == 'A' || darkGenes[1] == 'A'){
-    //makeTint(realBlack, 0.12, MULTIPLY);
+    makeTint(realBlack, 0.12, MULTIPLY);
   }
 
   //Anthracite
   if (anthraciteGenes[0] == 'A' && anthraciteGenes[1] == 'A'){
-    //makeTint(realBlack, 0.75, MULTIPLY);
+    makeTint(realBlack, 0.75, MULTIPLY);
   } else if (anthraciteGenes[0] == 'A' || anthraciteGenes[1] == 'A'){
-    //makeTint(realBlack, 0.37, MULTIPLY);
+    makeTint(realBlack, 0.37, MULTIPLY);
   }
   
   //WHITE
