@@ -635,7 +635,7 @@ function createPet(petValue){
     sockHeightMin = 130;
   	sockHeightMax = 200;
   }
-  console.log(sockHeightNum)
+  //console.log(sockHeightNum)
 
   //Front left - 15 smallest, 200 largest
   if (frontLeftSockGenes == 'aaaa'){
