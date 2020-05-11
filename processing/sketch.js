@@ -49,6 +49,7 @@ function setup() {
   image(ground, 0, 0, size, size);
   createElement('br');
   inputBox = createInput('Code Here');
+  inputBox.size(600);
   inputBox.input(myInputEvent);
   textBox = createElement('p');
   randomButton = createButton('random pet');
@@ -141,7 +142,7 @@ function randomGenes(){
   var birdDilute = ['S', 'c', 'g', 's'];
   
 
-	for (i = 0; i < 62; i++){
+	for (i = 0; i < 82; i++){
     if (i == 0 || i == 1){
       geneList = redGround;
     } else if (i == 18 || i == 19) {
@@ -342,6 +343,13 @@ function createPet(petValue){
   var overoGenes = genes[50] + genes[51];
   var diluteGenes = genes[52] + genes[53];
   var whiteFaceGenes = genes.slice(54, 62);
+  var frontLeftSockGenes = 'aaaa';//genes.slice(62, 66);
+  var frontRightSockGenes = genes.slice(66, 70);
+  var backLeftSockGenes = genes.slice(70, 74);
+  var backRightSockGenes = genes.slice(74, 78);
+  var sockHeightGenes = genes.slice(78, 82);
+  console.log(frontLeftSockGenes);
+  console.log(sockHeightGenes);
 
   //PHAEOMELANIN
 
@@ -498,13 +506,13 @@ function createPet(petValue){
 
   //Agouti - 40, 41
   if (agoutiGenes[0] == 'Y' || agoutiGenes[1] == 'Y'){
-    distort(tips, 100, 0.001, tipsmask, NORMAL, blackColor);
+    distort(tips, 100, 0.002, tipsmask, NORMAL, blackColor);
   } else if (agoutiGenes[0] == 'W' || agoutiGenes[1] == 'W'){
-    distort(agouti, 100, 0.001, maneless, NORMAL, blackColor);
+    distort(agouti, 100, 0.002, maneless, NORMAL, blackColor);
     tint(blackColor);
     image(headstripe, 0, 0, size, size);
   } else if (agoutiGenes[0] == 't' || agoutiGenes[1] == 't'){
-    distort(reversetips, 100, 0.001, reversetipsmask, NORMAL, blackColor);
+    distort(reversetips, 100, 0.002, reversetipsmask, NORMAL, blackColor);
   }
 
   // ULTRASTRUCTURE
@@ -603,20 +611,46 @@ function createPet(petValue){
     distort(bald, 50, 0.02, baldmask, NORMAL, color(255));
   }
   
+  //Socks - x, width, midpoint, minrandom, maxrandom, mask; tint to set color
+  tint(255);
+  
+  //Sock Height
+  var sockHeightNum = 0;
+  for (i = 0; i < sockHeightGenes.length; i++){
+    if (sockHeightGenes[i] == 'a'){
+      sockHeightNum += 1;
+    }
+  }
+  
+  var sockHeightMin = 0;
+  var sockHeightMax = 0;
+  if (sockHeightNum == 0){
+    sockHeightMin = 30;
+  } else if (sockHeightNum == 1){
+  	
+  } else if (sockHeightNum == 2){
+  	
+  } else if (sockHeightNum == 3){
+  	
+  } else {
+  	sockHeightMax == 220;
+  }
+  sockHeight = 30
+  console.log(sockHeight)
+
+  //Front left - 30 smallest, 300 largest
+  if (frontLeftSockGenes == 'aaaa'){
+  	makeSock(100, 135, 40, 100, 100, frontleft);
+  }
+  
+  
+  
   //Mane
   tint(0);
   image(mane, 0, 0, size, size);
 
-  
-  //Agouti - default amount 100, scale 0.001
-  //distort(agouti, 100, 0.001, maneless, MULTIPLY);
-  //blend(headstripe, 0, 0, imgSize, imgSize, 0, 0, size, size, MULTIPLY);
 
-  //Socks - x, width, midpoint, minrandom, maxrandom, mask; tint to set color
-  //tint(255);
 
-  //Front left - 30 smallest, 300 largest
-  //makeSock(150, 85, 40, 30, 220, frontleft);
 
   //Back left - 30 smallest, 270 largest
   //makeSock(350, 175, 180, 160, 270, backleft);
