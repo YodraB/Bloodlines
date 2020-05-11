@@ -471,7 +471,7 @@ function createPet(petValue){
   blackColor.setAlpha(blackAlpha);
 
   //Extension
-  if (extensionGenes[0] == 'M' || extensionGenes[1] == 'M'){
+  if ((extensionGenes[0] == 'M' || extensionGenes[1] == 'M') && (agoutiGenes[0] != 'Y' && agoutiGenes[1] != 'Y')){
     distort(extension, 100, 0.003, exmask, NORMAL, blackColor);
   } else if (extensionGenes[0] == 'r' && extensionGenes[1] == 'r'){
     blackAlpha = 0;
