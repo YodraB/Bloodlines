@@ -142,7 +142,7 @@ function randomGenes(){
   var birdDilute = ['S', 'c', 'g', 's'];
   
 
-	for (i = 0; i < 81; i++){
+	for (i = 0; i < 83; i++){
     if (i == 0 || i == 1){
       geneList = redGround;
     } else if (i == 18 || i == 19) {
@@ -351,6 +351,13 @@ function createPet(petValue){
   var backLeftSockGenes = genes.slice(70, 74);
   var backRightSockGenes = genes.slice(74, 78);
   var sockHeightGenes = genes[79] + genes[80];
+  var opalescentGenes = genes[81] + genes[82];
+
+  //Opalescent
+  var opalescentOn = false;
+  if (opalescentGenes[0] == 'a' && opalescentGenes[1] == 'a'){
+    opalescentOn = true;
+  }
 
   //PHAEOMELANIN
 
@@ -390,20 +397,45 @@ function createPet(petValue){
   var redColorValue = [0, 0, 0];
   var pinkColorValue = [0, 0, 0];
   if (groundRec == 4){
-    redColorValue = [179, 0, 0];
-    pinkColorValue = [255, 51, 154];
+    if (opalescentOn){
+      redColorValue = [197, 29, 0];
+      pinkColorValue = [139, 0, 147];
+    } else {
+      redColorValue = [179, 0, 0];
+      pinkColorValue = [255, 51, 154];
+    }
   } else if (groundRec == 3){
-    redColorValue = [255, 0, 0];
-    pinkColorValue = [255, 128, 191];
+    if (opalescentOn){
+      redColorValue = [197, 29, 0];
+      pinkColorValue = [191, 80, 198];
+    } else {
+      redColorValue = [255, 0, 0];
+      pinkColorValue = [255, 128, 191];
+    }
   } else if (groundRec == 2){
-    redColorValue = [255, 102, 0];
-    pinkColorValue = [255, 179, 217];
+    if (opalescentOn){
+      redColorValue = [187, 97, 0];
+      pinkColorValue = [218, 117, 224];
+    } else {
+      redColorValue = [255, 102, 0];
+      pinkColorValue = [255, 179, 217];
+    }
   } else if (groundRec == 1){
-    redColorValue = [255, 207, 102];
-    pinkColorValue = [255, 204, 230];
+    if (opalescentOn){
+      redColorValue = [176, 192, 0];
+      pinkColorValue = [237, 161, 242];
+    } else {
+      redColorValue = [255, 207, 102];
+      pinkColorValue = [255, 204, 230];
+    }
   } else {
-    redColorValue = [255, 255, 153];
-    pinkColorValue = [255, 230, 242];
+    if (opalescentOn){
+      redColorValue = [180, 255, 56];
+      pinkColorValue = [245, 208, 247];
+    } else {
+      redColorValue = [255, 255, 153];
+      pinkColorValue = [255, 230, 242];
+    }
   }
 
   if (groundColor == 'red'){
@@ -448,12 +480,20 @@ function createPet(petValue){
 
   //Brown
   if (brownGenes[0] == 'a' && brownGenes[1] == 'a'){
-    blackColor = color(87, 45, 19);
+    if (opalescentOn){
+      blackColor = color(128, 43, 0);
+    } else {
+      blackColor = color(87, 45, 19);
+    }
   }
 
   //Liver (overrides brown)
   if (liverGenes[0] == 'a' && liverGenes[1] == 'a'){
-    blackColor = color(173, 56, 43);
+    if (opalescentOn){
+      blackColor = color(240, 58, 12);
+    } else {
+      blackColor = color(173, 56, 43);
+    }
   }
 
   //Bird Dilute (Eumelanin)
@@ -518,21 +558,42 @@ function createPet(petValue){
 
   // ULTRASTRUCTURE
 
+  var blueTint = 'skyblue';
   var blueColor = color(77, 210, 255);
+  if (opalescentOn){
+    blueColor = color(10, 238, 255);
+  }
 
   //Grey
   if (greyGenes[0] == 'a' && greyGenes[1] == 'a'){
-    blueColor = color(177);
+    if (opalescentOn){
+      blueColor = color(149, 156, 167);
+    } else {
+      blueColor = color(177);
+    }
+    blueTint = 'grey';
   }
 
   //Violet
   if (violetGenes[0] == 'a' && violetGenes[1] == 'a'){
-    blueColor = color(189, 189, 255);
-  } else if (violetGenes[0] == 'a' || violetGenes[1] == 'a'){
-    if (blueColor = color(77, 210, 255)){ //skyblue
-      blueColor = color(144, 144, 255);
+    if (opalescentOn){
+      blueColor = color(159, 170, 255);
     } else {
-      blueColor = color(162, 162, 193);
+      blueColor = color(189, 189, 255);
+    }
+  } else if (violetGenes[0] == 'a' || violetGenes[1] == 'a'){
+    if (blueTint = 'skyblue'){
+      if (opalescentOn){
+        blueColor = color(93, 158, 255);
+      } else {
+        blueColor = color(144, 144, 255);
+      }
+    } else {
+      if (opalescentOn){
+        blueColor = color(131, 142, 224);
+      } else {
+        blueColor = color(162, 162, 193);
+      }
     }
   }
 
@@ -553,13 +614,12 @@ function createPet(petValue){
   } else if (birdDiluteGenes[0] == 'g' || birdDiluteGenes[1] == 'g'){
     blueAlpha *= 0.5;
   } else {
-    blueAlpha *= 0.1;
+    blueAlpha = 0.1;
   }
 
   //Base blue here
   if (blueOn){
-    makeTint(blueColor, blueAlpha, NORMAL); //not normal
-    console.log('blue', blueColor, blueAlpha);
+    makeTint(blueColor, blueAlpha, HARD_LIGHT);
   }
 
   //Dark
