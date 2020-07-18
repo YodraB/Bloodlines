@@ -339,8 +339,8 @@ function createPet(petValue){
   var birdDiluteGenes = genes[36] + genes[37];
   var greyGenes = genes[38] + genes[39];
   var violetGenes = genes[40] + genes[41];
-  var darkGenes = 'aa'; //genes[42] + genes[43];
-  var anthraciteGenes = 'aa'; //genes[44] + genes[45];
+  var darkGenes = genes[42] + genes[43];
+  var anthraciteGenes = genes[44] + genes[45];
   var clearGenes = genes[46] + genes[47];
   var tobianoGenes = genes[48] + genes[49];
   var overoGenes = genes[50] + genes[51];
@@ -352,6 +352,7 @@ function createPet(petValue){
   var backRightSockGenes = genes.slice(74, 78);
   var sockHeightGenes = genes[79] + genes[80];
   var opalescentGenes = genes[81] + genes[82];
+  console.log(tobianoGenes);
 
   //Opalescent
   var opalescentOn = false;
