@@ -343,7 +343,7 @@ function createPet(petValue){
   var anthraciteGenes = genes[44] + genes[45];
   var clearGenes = genes[46] + genes[47];
   var tobianoGenes = genes[48] + genes[49];
-  var overoGenes = genes[50] + genes[51];
+  var overoGenes = 'aa'; //genes[50] + genes[51];
   var diluteGenes = genes[52] + genes[53];
   var whiteFaceGenes = genes.slice(54, 62);
   var frontLeftSockGenes = genes.slice(62, 66);
@@ -648,7 +648,7 @@ function createPet(petValue){
   
   //Overo
   if (overoGenes[0] == 'a' && overoGenes[1] == 'a'){
-    makeNoise(0.05, 0.8, ground);
+    makeNoise(0.01, 0.8, ground);
   }
   
   //Dilute
