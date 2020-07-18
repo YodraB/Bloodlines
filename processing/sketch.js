@@ -343,7 +343,7 @@ function createPet(petValue){
   var anthraciteGenes = genes[44] + genes[45];
   var clearGenes = genes[46] + genes[47];
   var tobianoGenes = genes[48] + genes[49];
-  var overoGenes = 'aa'; //genes[50] + genes[51];
+  var overoGenes = genes[50] + genes[51];
   var diluteGenes = genes[52] + genes[53];
   var whiteFaceGenes = genes.slice(54, 62);
   var frontLeftSockGenes = genes.slice(62, 66);
@@ -352,7 +352,6 @@ function createPet(petValue){
   var backRightSockGenes = genes.slice(74, 78);
   var sockHeightGenes = genes[79] + genes[80];
   var opalescentGenes = genes[81] + genes[82];
-  console.log(tobianoGenes);
 
   //Opalescent
   var opalescentOn = false;
@@ -467,11 +466,11 @@ function createPet(petValue){
 
   if (redOn == true){
     if (redPatches == true && redPatchAmount == 1){
-      makeNoise(0.02, 0.8, blueMaskVar);
+      makeNoise(0.01, 0.8, blueMaskVar);
     } else if (redPatches == true && redPatchAmount == 2) {
-      makeNoise(0.02, 1, blueMaskVar);
+      makeNoise(0.01, 1, blueMaskVar);
     } else if (redPatches == true && redPatchAmount == 3) {
-      makeNoise(0.02, 1.4, blueMaskVar);
+      makeNoise(0.01, 1.4, blueMaskVar);
     }
   }
 
@@ -541,20 +540,20 @@ function createPet(petValue){
 
   tint(blackColor);
   if (blackPatches == true && blackPatchAmount == 1){
-    makeNoise(0.02, 0.8, ground);
+    makeNoise(0.01, 0.8, ground);
   } else if (blackPatches == true && blackPatchAmount == 2) {
-    makeNoise(0.02, 1, ground);
+    makeNoise(0.01, 1, ground);
   }
 
   //Agouti - 40, 41
   if (agoutiGenes[0] == 'Y' || agoutiGenes[1] == 'Y'){
-    distort(tips, 100, 0.002, tipsmask, NORMAL, blackColor);
+    distort(tips, 200, 0.002, tipsmask, NORMAL, blackColor);
   } else if (agoutiGenes[0] == 'W' || agoutiGenes[1] == 'W'){
-    distort(agouti, 100, 0.002, maneless, NORMAL, blackColor);
+    distort(agouti, 200, 0.002, maneless, NORMAL, blackColor);
     tint(blackColor);
     image(headstripe, 0, 0, size, size);
   } else if (agoutiGenes[0] == 't' || agoutiGenes[1] == 't'){
-    distort(reversetips, 100, 0.002, reversetipsmask, NORMAL, blackColor);
+    distort(reversetips, 200, 0.002, reversetipsmask, NORMAL, blackColor);
   }
 
   // ULTRASTRUCTURE
@@ -665,13 +664,13 @@ function createPet(petValue){
   }
 
   if (whiteFaceAmount == 1){
-    distort(star, 25, 0.02, starmask, NORMAL, color(255));
+    distort(star, 25, 0.01, starmask, NORMAL, color(255));
   } else if (whiteFaceAmount == 2){
-    distort(stripe, 25, 0.02, stripemask, NORMAL, color(255));
+    distort(stripe, 25, 0.01, stripemask, NORMAL, color(255));
   } else if (whiteFaceAmount == 3){
     distort(blaze, 25, 0.01, blazemask, NORMAL, color(255));
   } else if (whiteFaceAmount == 4){
-    distort(bald, 50, 0.02, baldmask, NORMAL, color(255));
+    distort(bald, 50, 0.01, baldmask, NORMAL, color(255));
   }
   
   //Socks - x, width, midpoint, minrandom, maxrandom, mask; tint to set color
