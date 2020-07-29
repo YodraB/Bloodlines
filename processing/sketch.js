@@ -142,7 +142,7 @@ function randomGenes(){
   var birdDilute = ['S', 'c', 'g', 's'];
   
 
-	for (i = 0; i < 83; i++){
+	for (i = 0; i < 87; i++){
     if (i == 0 || i == 1){
       geneList = redGround;
     } else if (i == 18 || i == 19) {
@@ -198,7 +198,7 @@ function makeNoise(noiseScale, coeff, mask){
   
 }
 
-function makeTint(colorValue, alpha, mode){
+function makeTint(colorValue, alpha, mode, mask){
   let tintImage = createImage(width, height);
   tintImage.loadPixels();
   for (let x = 0; x < tintImage.width; x++){
@@ -207,7 +207,7 @@ function makeTint(colorValue, alpha, mode){
     }
   }
   tintImage.updatePixels();
-  tintImage.mask(ground);
+  tintImage.mask(mask);
   blend(tintImage, 0, 0, size, size, 0, 0, size, size, mode);
 }
 
@@ -352,6 +352,8 @@ function createPet(petValue){
   var backRightSockGenes = genes.slice(74, 78);
   var sockHeightGenes = genes[79] + genes[80];
   var opalescentGenes = genes[81] + genes[82];
+  var maneLightGreyGenes = genes[83] + genes[84];
+  var maneDarkGreyGenes = genes[85] + genes[86];
 
   //Opalescent
   var opalescentOn = false;
@@ -619,22 +621,22 @@ function createPet(petValue){
 
   //Base blue here
   if (blueOn){
-    makeTint(blueColor, blueAlpha, HARD_LIGHT);
+    makeTint(blueColor, blueAlpha, HARD_LIGHT, ground);
   }
 
   //Dark
   var realBlack = color(0);
   if (darkGenes[0] == 'A' && darkGenes[1] == 'A'){
-    makeTint(realBlack, 0.25, MULTIPLY);
+    makeTint(realBlack, 0.25, MULTIPLY, ground);
   } else if (darkGenes[0] == 'A' || darkGenes[1] == 'A'){
-    makeTint(realBlack, 0.12, MULTIPLY);
+    makeTint(realBlack, 0.12, MULTIPLY, ground);
   }
 
   //Anthracite
   if (anthraciteGenes[0] == 'A' && anthraciteGenes[1] == 'A'){
-    makeTint(realBlack, 0.75, MULTIPLY);
+    makeTint(realBlack, 0.75, MULTIPLY, ground);
   } else if (anthraciteGenes[0] == 'A' || anthraciteGenes[1] == 'A'){
-    makeTint(realBlack, 0.37, MULTIPLY);
+    makeTint(realBlack, 0.37, MULTIPLY, ground);
   }
   
   //WHITE
@@ -652,7 +654,7 @@ function createPet(petValue){
   
   //Dilute
   if (diluteGenes[0] == 'a' && diluteGenes[1] == 'a'){
-    makeTint(color(255), 0.7, SCREEN);
+    makeTint(color(255), 0.7, SCREEN, ground);
   }
 
   //Face White
@@ -736,8 +738,47 @@ function createPet(petValue){
   
   
   //Mane
-  tint(0);
+  
+  tint(255);
   image(mane, 0, 0, size, size);
+  
+  //Mane Red
+  
+  if (groundColor == 'red'){
+    tint(redColorValue);
+  } else if (groundColor == 'pink'){
+    tint(pinkColorValue);
+  } else {
+    noTint();
+  }
+  if (redOn == true){
+  	image(mane, 0, 0, size, size);
+  }
+  
+  //Mane black
+  
+  if (maneLightGreyGenes[0] == 'A' || maneLightGreyGenes[1] == 'A'){
+	  makeTint(color(0), 0.4, MULTIPLY, mane);
+  }
+  
+  if ((maneDarkGreyGenes[0] == 'A' || maneDarkGreyGenes[1] == 'A') && maneLightGreyGenes == 'aa'){
+	  makeTint(color(0), 0.7, MULTIPLY, mane);
+  } else if (maneDarkGreyGenes[0] == 'A' || maneDarkGreyGenes[1] == 'A'){
+	  tint(0)
+	  image(mane, 0, 0, size, size);
+  }
+  
+  if (agoutiGenes[0] == 'W' || agoutiGenes[1] == 'W'){
+	  tint(0)
+	  image(mane, 0, 0, size, size);
+  }
+  
+  //Mane Dominant White
+  
+  if (sockHeightNum >= 1 && (frontLeftSockGenes == 'aaaa' || backLeftSockGenes == 'aaaa' || frontRightSockGenes == 'aaaa' || backRightSockGenes == 'aaaa')){
+	  tint(255)
+	  image(mane, 0, 0, size, size);
+  }
 
   //Back right - 75 smallest, 270 largest
   //makeSock(500, 85, 70, 75, 270, backright);
