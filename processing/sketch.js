@@ -748,8 +748,8 @@ function createPet(petValue){
     tint(redColorValue);
   } else if (groundColor == 'pink'){
     tint(pinkColorValue);
-  } else {
-    noTint();
+  } else if (redPatches == true){
+    tint(redColorValue);
   }
   if (redOn == true){
   	image(mane, 0, 0, size, size);
