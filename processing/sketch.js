@@ -355,7 +355,7 @@ function createPet(petValue){
   var maneLightGreyGenes = genes[83] + genes[84];
   var maneDarkGreyGenes = genes[85] + genes[86];
 
-  //Opalescent
+  //Opalescent - controls color selection. 'a' recessive = active
   var opalescentOn = false;
   if (opalescentGenes[0] == 'a' && opalescentGenes[1] == 'a'){
     opalescentOn = true;
@@ -363,7 +363,7 @@ function createPet(petValue){
 
   //PHAEOMELANIN
 
-  //Blue gene
+  //Blue gene - controls expression of phaeomelanin. 'y' mid = phaeo restriced to face and tail. 'b' = no phaeo at all
   var blueMaskVar = ground;
   var redOn = true;
   if ((blueGenes[0] == 'y' || blueGenes[1] == 'y') && (blueGenes[0] != 'B' && blueGenes[1] != 'B')){
@@ -379,7 +379,7 @@ function createPet(petValue){
   }
   
 
-  //Base Color - tint to set color()
+  //Base Color - tint to set color() - controls base color of coat. 'R' dominant = red/yellow sequence. 'P' mid  = pink sequence. 'r' recessive = white.
   var groundColor = '';
   if (groundColorGenes[0] == 'R' || groundColorGenes[1] == 'R'){
     groundColor = 'red';
@@ -388,7 +388,8 @@ function createPet(petValue){
   } else {
     groundColor = 'white';
   }
-
+  
+	//Ground Rec - controls darkness of expression of base sequence. 'a' recessive = one step darker
   var groundRec = 0;
   for (i = 0; i < groundRecGenes.length; i+= 2 ){
     if (groundRecGenes[i] != 'A' && groundRecGenes[i + 1] != 'A'){
@@ -451,12 +452,13 @@ function createPet(petValue){
     image(blueMaskVar, 0, 0, size, size);
   }
 
-  //Red Patches
+  //Red Patches - controls whether patches are possible. 'A' dominant = patches
   var redPatches = false;
   if (redPatchGenes[0] == 'A' || redPatchGenes[1] == 'A'){
     redPatches = true;
   }
 
+  //Red Patch Amount - controls amount of ref patches. 'a' recessive = + amount of patches (max 3)
   var redPatchAmount = 0;
   for (i = 0; i < redPatchAmountGenes.length; i+=2 ){
     if (redPatchAmountGenes[i] == 'a' && redPatchAmountGenes[i + 1] == 'a'){
@@ -480,7 +482,7 @@ function createPet(petValue){
 
   var blackColor = color(18);
 
-  //Brown
+  //Brown - controls change of back to brown. 'a' recessive = black to brown
   if (brownGenes[0] == 'a' && brownGenes[1] == 'a'){
     if (opalescentOn){
       blackColor = color(128, 43, 0);
@@ -489,7 +491,7 @@ function createPet(petValue){
     }
   }
 
-  //Liver (overrides brown)
+  //Liver (overrides brown) - controls change of black or brown to liver. 'a' recessive = black/brown to liver
   if (liverGenes[0] == 'a' && liverGenes[1] == 'a'){
     if (opalescentOn){
       blackColor = color(240, 58, 12);
@@ -498,7 +500,7 @@ function createPet(petValue){
     }
   }
 
-  //Bird Dilute (Eumelanin)
+  //Bird Dilute (Eumelanin) - controls alpha of eumelanin. 'cg' or 'gc' codominant = 87 alpha. 'c' mid = 75 alpha. 'g' recessive = 50 alpha.
   var blackAlpha = 225;
   if (birdDiluteGenes[0] == 'S' || birdDiluteGenes[1] == 'S'){
     //nothing happens
@@ -512,7 +514,7 @@ function createPet(petValue){
 
   blackColor.setAlpha(blackAlpha);
 
-  //Extension
+  //Extension - controls mask, whether eumelanin will express. 'M' mid = mask. 'r' recessive = no eumelanin
   if ((extensionGenes[0] == 'M' || extensionGenes[1] == 'M') && (agoutiGenes[0] != 'Y' && agoutiGenes[1] != 'Y')){
     distort(extension, 100, 0.003, exmask, NORMAL, blackColor);
   } else if (extensionGenes[0] == 'r' && extensionGenes[1] == 'r'){
@@ -521,18 +523,20 @@ function createPet(petValue){
 
   blackColor.setAlpha(blackAlpha);
 
-  //Dominant black
+  //Dominant black - controls a top layer of eumelanin. 'K' dominant = layer present.
   if (domBlackGenes[0] == 'K' || domBlackGenes[1] == 'K'){
     tint(blackColor);
     image(ground, 0, 0, size, size);
   }
 
-  //Black patches
+  //Black patches - controls whether black patches exist or not. 'A' dominant = patches present
   var blackPatches = false;
   if (blackPatchGenes[0] == 'A' || blackPatchGenes[1] == 'A'){
     blackPatches = true;
   }
 
+  
+  //Black parches amount - controls amount of black patches. 'a' recessive = amount +1 (max 2)
   var blackPatchAmount = 0;
   for (i = 0; i < blackPatchAmountGenes.length; i+=2 ){
     if (blackPatchAmountGenes[i] == 'a' && blackPatchAmountGenes[i + 1] == 'a'){
@@ -547,7 +551,7 @@ function createPet(petValue){
     makeNoise(0.01, 1, ground);
   }
 
-  //Agouti - 40, 41
+  //Agouti - controls most eumealin patterns. 'Y' dominant = black tips. 'W' mid 1 = agouti. 't' mid 2 = tan tips. 
   if (agoutiGenes[0] == 'Y' || agoutiGenes[1] == 'Y'){
     distort(tips, 200, 0.002, tipsmask, NORMAL, blackColor);
   } else if (agoutiGenes[0] == 'W' || agoutiGenes[1] == 'W'){
@@ -566,7 +570,7 @@ function createPet(petValue){
     blueColor = color(10, 238, 255);
   }
 
-  //Grey
+  //Grey - controls if ultrastructure is blue or grey. 'a' recessive = grey
   if (greyGenes[0] == 'a' && greyGenes[1] == 'a'){
     if (opalescentOn){
       blueColor = color(149, 156, 167);
@@ -576,7 +580,7 @@ function createPet(petValue){
     blueTint = 'grey';
   }
 
-  //Violet
+  //Violet - controls violet tint. 'AA' dominant = bright violet. 'Aa' or 'aA' codoninant = violet-tinted.
   if (violetGenes[0] == 'a' && violetGenes[1] == 'a'){
     if (opalescentOn){
       blueColor = color(159, 170, 255);
@@ -599,13 +603,13 @@ function createPet(petValue){
     }
   }
 
-  //Clear
+  //Clear - controls whether ultrastructure expresses. 'a' recessive = no ultrastructure
   var blueOn = true;
   if (clearGenes[0] == 'a' && clearGenes[1] == 'a'){
     blueOn = false;
   }
 
-  //Bird dilute
+  //Bird dilute - controls ultrastructure alpha. 'cg' or 'gc' codominant = 40 alpha. 'c' mid 1 = 90 alpha. 'g' mid 2 = 50 alpha. 's' recssive = 10 alpha
   var blueAlpha = 0.5;
   if (birdDiluteGenes[0] == 'S' || birdDiluteGenes[1] == 'S'){
     //nothing happens
@@ -624,7 +628,7 @@ function createPet(petValue){
     makeTint(blueColor, blueAlpha, HARD_LIGHT, ground);
   }
 
-  //Dark
+  //Dark - controls a layer of dark tint. 'AA' dominant = 25% darker. 'Aa' or 'aA' codominant = 12% darker. 
   var realBlack = color(0);
   if (darkGenes[0] == 'A' && darkGenes[1] == 'A'){
     makeTint(realBlack, 0.25, MULTIPLY, ground);
@@ -632,7 +636,7 @@ function createPet(petValue){
     makeTint(realBlack, 0.12, MULTIPLY, ground);
   }
 
-  //Anthracite
+  //Anthracite - controls a second layer of dark tint. 'AA' dominant = 75% darker. 'Aa' or 'aA' = 37% darker. 
   if (anthraciteGenes[0] == 'A' && anthraciteGenes[1] == 'A'){
     makeTint(realBlack, 0.75, MULTIPLY, ground);
   } else if (anthraciteGenes[0] == 'A' || anthraciteGenes[1] == 'A'){
@@ -642,22 +646,24 @@ function createPet(petValue){
   //WHITE
   tint(255);
 
-  //Tobiano
+  //Tobiano - controls large patches of white. 'a' reccessive = patches present
+  //add tuning controls!
   if (tobianoGenes[0] == 'a' && tobianoGenes[1] == 'a'){
     makeNoise(0.008, 1, ground);
   }
   
-  //Overo
+  //Overo - controls small patches of white. 'a' recessive = patches present
+  // make smaller again + tuning controls
   if (overoGenes[0] == 'a' && overoGenes[1] == 'a'){
     makeNoise(0.01, 0.8, ground);
   }
   
-  //Dilute
+  //Dilute - controls layer of lightness. 'a' recessive = colors lightened by 70%
   if (diluteGenes[0] == 'a' && diluteGenes[1] == 'a'){
     makeTint(color(255), 0.7, SCREEN, ground);
   }
 
-  //Face White
+  //Face White - controls presence and amount of face white. 'a' recessive adds +1 face white.
   var whiteFaceAmount = 0;
   for (i = 0; i < whiteFaceGenes.length; i+=2 ){
     if (whiteFaceGenes[i] == 'a' && whiteFaceGenes[i + 1] == 'a'){
@@ -678,7 +684,7 @@ function createPet(petValue){
   //Socks - x, width, midpoint, minrandom, maxrandom, mask; tint to set color
   tint(255);
   
-  //Sock Height
+  //Sock Height - controls height of all socks (roughly). 'a' = +1 sock height
   var sockHeightNum = 0;
   for (i = 0; i < sockHeightGenes.length; i++){
     if (sockHeightGenes[i] == 'a'){
@@ -700,12 +706,12 @@ function createPet(petValue){
   }
   //console.log(sockHeightNum)
 
-  //Front left - 15 smallest, 200 largest
+  //Front left - 15 smallest, 200 largest. Controls presence of front left sock. 'aaaa' double recessive = sock present
   if (frontLeftSockGenes == 'aaaa'){
   	makeSock(100, 135, 40, sockHeightMin, sockHeightMax, frontleft);
   }
 
-  //Back left - 30 smallest, 270 largest
+  //Back left - 30 smallest, 270 largest. Controls presence of back left sock. 'aaaa' double recessive = sock present
   if (backLeftSockGenes == 'aaaa'){
     if (sockHeightNum == 2){
       makeSock(320, 130, 87, sockHeightMin + 30, sockHeightMax + 50, backleft);
@@ -716,7 +722,7 @@ function createPet(petValue){
     }
   }
 
-  //Front right - 40 smallest, 220 largest
+  //Front right - 40 smallest, 220 largest. Controls presence of front right sock. 'aaaa' double recessive = sock present
   if (frontRightSockGenes == 'aaaa'){
     if (sockHeightNum == 0){
       makeSock(100, 85, 40, sockHeightMin + 40, sockHeightMax, back);
@@ -725,7 +731,7 @@ function createPet(petValue){
     }
   }
 
-  //Back right - 75 smallest, 270 largest
+  //Back right - 75 smallest, 270 largest. Controls presence of back left sock. 'aaaa' double recessive = sock present
   if (backRightSockGenes == 'aaaa'){
     if (sockHeightNum == 2){
       makeSock(420, 85, 70, sockHeightMin + 30, sockHeightMax + 50, backright);
@@ -757,10 +763,12 @@ function createPet(petValue){
   
   //Mane black
   
+  //Mane Light Grey - controls lighter layer of dark tint. 'A' dominant = + 40% darkness
   if (maneLightGreyGenes[0] == 'A' || maneLightGreyGenes[1] == 'A'){
 	  makeTint(color(0), 0.4, MULTIPLY, mane);
   }
   
+  //ManeDarkGrey - controls darker layer of dark tint. 'A' = mane darker by 70, or if mane is already light grey, to black
   if ((maneDarkGreyGenes[0] == 'A' || maneDarkGreyGenes[1] == 'A') && maneLightGreyGenes == 'aa'){
 	  makeTint(color(0), 0.7, MULTIPLY, mane);
   } else if (maneDarkGreyGenes[0] == 'A' || maneDarkGreyGenes[1] == 'A'){
@@ -779,9 +787,6 @@ function createPet(petValue){
 	  tint(255)
 	  image(mane, 0, 0, size, size);
   }
-
-  //Back right - 75 smallest, 270 largest
-  //makeSock(500, 85, 70, 75, 270, backright);
 
   //Eye - tint to set color
   tint(255, 250, 205);
