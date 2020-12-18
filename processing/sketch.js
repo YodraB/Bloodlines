@@ -142,7 +142,7 @@ function randomGenes(){
   var birdDilute = ['S', 'c', 'g', 's'];
   
 
-	for (i = 0; i < 87; i++){
+	for (i = 0; i < 94; i++){
     if (i == 0 || i == 1){
       geneList = redGround;
     } else if (i == 18 || i == 19) {
@@ -354,6 +354,8 @@ function createPet(petValue){
   var opalescentGenes = genes[81] + genes[82];
   var maneLightGreyGenes = genes[83] + genes[84];
   var maneDarkGreyGenes = genes[85] + genes[86];
+  var tobianoTweakGenes = genes.slice(86, 90);
+  var overoTweakGenes = genes.slice(90, 94);
 
   //Opalescent - controls color selection. 'a' recessive = active
   var opalescentOn = false;
@@ -646,16 +648,52 @@ function createPet(petValue){
   //WHITE
   tint(255);
 
-  //Tobiano - controls large patches of white. 'a' reccessive = patches present
-  //add tuning controls!
+  //Tobiano - controls large patches of white
+  var tobianoOn = false;
+
   if (tobianoGenes[0] == 'a' && tobianoGenes[1] == 'a'){
+    tobianoOn = true;
+  }
+
+  //TobianoTweak - controls spread of tobiano. 'A' dominant = +1 tobiano patches
+  var tobianoAmount = 0;
+  for (i = 0; i < tobianoTweakGenes.length; i+=2 ){
+    if (tobianoTweakGenes[i] == 'A' || tobianoTweakGenes[i + 1] == 'A'){
+      tobianoAmount += 1;
+    }
+  }
+
+  if (tobianoAmount == 0 && tobianoOn == true){
+    makeNoise(0.008, 0.8, ground);
+  } else if (tobianoAmount == 1 && tobianoOn == true){
     makeNoise(0.008, 1, ground);
+  } else if (tobianoOn == true) {
+    makeNoise(0.008, 1.2, ground);
   }
   
+  
   //Overo - controls small patches of white. 'a' recessive = patches present
-  // make smaller again + tuning controls
+  var overoOn = false;
+
+  //OveroTweak - controls spread of overo. 'a' recessive = +1 overo patches
+  var overoAmount = 0;
+  var overoScale = 0.02;
+  for (i = 0; i < overoTweakGenes.length; i+=2 ){
+    if (overoTweakGenes[i] == 'a' && overoTweakGenes[i + 1] == 'a'){
+      overoAmount += 1;
+    }
+  }
+
   if (overoGenes[0] == 'a' && overoGenes[1] == 'a'){
-    makeNoise(0.01, 0.8, ground);
+    overoOn = true;
+  }
+
+  if (overoAmount == 0 && overoOn == true){
+    makeNoise(overoScale, 0.7, ground);
+  } else if (overoAmount == 1 && overoOn == true){
+    makeNoise(overoScale, 1, ground);
+  } else if (overoOn == true){
+    makeNoise(overoScale, 1.4, ground);
   }
   
   //Dilute - controls layer of lightness. 'a' recessive = colors lightened by 70%
