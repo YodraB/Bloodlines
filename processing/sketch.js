@@ -137,20 +137,17 @@ function randomGenes(){
   var redGround = ['R', 'P', 'r'];
   var blue = ['B', 'y', 'b'];
   var extension = ['M', 'E', 'r'];
-  var domBlack = ['K', 'b', 'k'];
   var agoutiGen = ['Y', 'W', 't', 'a'];
   var birdDilute = ['S', 'c', 'g', 's'];
   
 
-	for (i = 0; i < 94; i++){
+	for (i = 0; i < 94; i++){ //47 genes (94 alleles)
     if (i == 0 || i == 1){
       geneList = redGround;
     } else if (i == 18 || i == 19) {
       geneList = blue;
     } else if (i == 20 || i == 21){
       geneList = extension;
-    } else if (i == 22 || i == 23){
-      geneList = domBlack;
     } else if (i == 32 || i == 33){
       geneList = agoutiGen;
     } else if (i == 36 || i == 37){
@@ -448,8 +445,10 @@ function createPet(petValue){
   } else if (groundColor == 'pink'){
     tint(pinkColorValue);
   } else {
-    noTint();
+    tint(255);
   }
+  
+  //Adds ground color if redOn is true
   if (redOn == true){
     image(blueMaskVar, 0, 0, size, size);
   }
@@ -526,7 +525,7 @@ function createPet(petValue){
   blackColor.setAlpha(blackAlpha);
 
   //Dominant black - controls a top layer of eumelanin. 'K' dominant = layer present.
-  if (domBlackGenes[0] == 'K' || domBlackGenes[1] == 'K'){
+  if (domBlackGenes[0] == 'A' || domBlackGenes[1] == 'A'){
     tint(blackColor);
     image(ground, 0, 0, size, size);
   }
@@ -655,7 +654,7 @@ function createPet(petValue){
     tobianoOn = true;
   }
 
-  //TobianoTweak - controls spread of tobiano. 'A' dominant = +1 tobiano patches
+  //TobianoTweak - controls spread of tobiano. 'A' dominant = +1 tobiano patches (max 2)
   var tobianoAmount = 0;
   for (i = 0; i < tobianoTweakGenes.length; i+=2 ){
     if (tobianoTweakGenes[i] == 'A' || tobianoTweakGenes[i + 1] == 'A'){
@@ -675,7 +674,7 @@ function createPet(petValue){
   //Overo - controls small patches of white. 'a' recessive = patches present
   var overoOn = false;
 
-  //OveroTweak - controls spread of overo. 'a' recessive = +1 overo patches
+  //OveroTweak - controls spread of overo. 'a' recessive = +1 overo patches (max 2)
   var overoAmount = 0;
   var overoScale = 0.02;
   for (i = 0; i < overoTweakGenes.length; i+=2 ){
