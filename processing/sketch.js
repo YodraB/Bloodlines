@@ -208,6 +208,46 @@ function makeTint(colorValue, alpha, mode, mask){
   blend(tintImage, 0, 0, size, size, 0, 0, size, size, mode);
 }
 
+function tintNoise(noiseScale, coeff, mask, colorValue, alphaVal, mode){
+  let time = new Date;
+
+  time = time.getMilliseconds();
+
+  if (mask == ground){
+      noiseImageLegs = noiseImageCreate(time - 70, noiseScale, coeff)
+      for (let x = 0; x < noiseImageLegs.width; x++){
+          for (let y = 0; y < noiseImageLegs.height; y++){
+              noiseImageLegs.set(x, y, color(red(colorValue), green(colorValue), blue(colorValue), alphaVal * noiseImageLegs.pixels[(y * noiseImageLegs.width + x) * 4 + 3] ) );
+          }
+      }
+      noiseImageLegs.updatePixels();
+      noiseImageLegs.mask(back);
+      blend(noiseImageLegs, 0 , 0, size, size, 0, 0, size, size, mode);
+
+      noiseImage = noiseImageCreate(time, noiseScale, coeff)
+      for (let x = 0; x < noiseImage.width; x++){
+          for (let y = 0; y < noiseImage.height; y++){
+              noiseImage.set(x, y, color(red(colorValue), green(colorValue), blue(colorValue), alphaVal * noiseImage.pixels[(y * noiseImage.width + x) * 4 + 3] ) );
+          }
+      }
+      noiseImage.updatePixels();
+      noiseImage.mask(front);
+      blend(noiseImage, 0 , 0, size, size, 0, 0, size, size, mode);
+      //image(noiseImage, 0 , 0);
+      
+  } else if (mask == bluemask){
+      noiseImage = noiseImageCreate(time, noiseScale, coeff)
+      for (let x = 0; x < noiseImage.width; x++){
+          for (let y = 0; y < noiseImage.height; y++){
+              noiseImage.set(x, y, color(red(colorValue), green(colorValue), blue(colorValue), alphaVal * noiseImage.pixels[(y * noiseImage.width + x) * 4 + 3] ) );
+          }
+      }
+      noiseImage.updatePixels();
+      noiseImage.mask(bluemask);
+      blend(noiseImage, 0 , 0, size, size, 0, 0, size, size, mode);
+  }
+}
+
 function makeSock(x, width, midwidth, minHeight, maxHeight, mask){
   var height = random(minHeight, maxHeight)
   var variance = random(-50, 50);
@@ -333,6 +373,14 @@ function createPet(petValue){
     genes += groundRecGenes;
     print('groundRecGenes : ' + groundRecGenes);
 
+    var yellowGroundGenes = genesGet('a', 2);
+    genes += yellowGroundGenes;
+    print('yellowGroundGenes : ' + yellowGroundGenes);
+
+    var desatGroundGenes = genesGet('a');
+    genes += desatGroundGenes;
+    print('desatGroundGenes : ' + desatGroundGenes);
+
     var redPatchGenes = genesGet('a');
     genes += redPatchGenes;
     print('redPatchGenes : ' + redPatchGenes);
@@ -340,6 +388,10 @@ function createPet(petValue){
     var redPatchAmountGenes = genesGet('a', 4);
     genes += redPatchAmountGenes;
     print('redPatchAmountGenes : ' + redPatchAmountGenes);
+
+    var yellowPatchGenes = genesGet('a', 2);
+    genes += yellowPatchGenes;
+    print('yellowPatchGenes : ' + yellowPatchGenes);
 
     var blueGenes = genesGet(['B', 'y', 'b']);
     genes += blueGenes;
@@ -484,7 +536,7 @@ function createPet(petValue){
     opalescentOn = true;
   }
 
-  //PHAEOMELANIN
+  //PHAEOMELANIN - (actually carotenoids but I'm not changing every time it says phaeomelanin)
 
   //Blue gene - controls expression of phaeomelanin. 'y' mid = phaeo restriced to face and tail. 'b' = no phaeo at all
   var blueMaskVar = ground;
@@ -577,6 +629,21 @@ function createPet(petValue){
     image(blueMaskVar, 0, 0, size, size);
   }
 
+  //Yellow Ground - adds a layer of yellow/saturation to the ground color. 'aaaa' double recessive = +40% yellow
+  if (redOn == true){
+    if (yellowGroundGenes == 'aaaa'){
+      makeTint(color(255, 228, 116), 0.8, OVERLAY, blueMaskVar);
+    } else if ((yellowGroundGenes[0] == 'a' && yellowGroundGenes[1] == 'a') || (yellowGroundGenes[2] == 'a' && yellowGroundGenes[3] == 'a')){
+      makeTint(color(255, 228, 116), 0.2, OVERLAY, blueMaskVar);
+    }
+  }
+
+  //Desat Ground - adds a layer of grey, effectively desaturating the ground color.
+  if (redOn == true && (groundColor == 'red' || groundColor == 'pink') && (desatGroundGenes[0] == 'A' || desatGroundGenes[1] == 'A')){
+    makeTint(color(100), 0.5, NORMAL, blueMaskVar);
+  }
+  print(desatGroundGenes)
+
   //Red Patches - controls whether patches are possible. 'A' dominant = patches
   var redPatches = false;
   if (redPatchGenes[0] == 'A' || redPatchGenes[1] == 'A'){
@@ -600,6 +667,11 @@ function createPet(petValue){
       makeNoise(0.01, 1, blueMaskVar);
     } else if (redPatches == true && redPatchAmount == 3) {
       makeNoise(0.01, 1.4, blueMaskVar);
+    }
+
+  //Yellow Over Patches - controls a layer of translucent yellow patches. 'aaaa' double recessive = patches present
+    if (yellowPatchGenes == 'aaaa'){
+      tintNoise(0.01, 1, blueMaskVar, color(225, 228, 116), 0.4, HARD_LIGHT);
     }
   }
 
@@ -974,7 +1046,7 @@ function createPet(petValue){
   }
 
   //Yellow - controls layers of bright yellow. domaninant 'A' = + 20% yellow-ness
-  if (eyeYellowGenes[0] == 'A' || yellowGenes[1] == 'A'){
+  if (eyeYellowGenes[0] == 'A' || eyeYellowGenes[1] == 'A'){
     makeTint(color(255, 255, 0), 0.2, NORMAL, eye);
   }
 

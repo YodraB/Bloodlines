@@ -172,6 +172,53 @@ function setup() {
     }
     
   }
+
+  function tintNoise(noiseScale, coeff, mask, seed, colorValue, alphaVal, mode){
+    let time = new Date;
+
+    if (seed == 'null'){
+        time = time.getMilliseconds();
+    } else {
+        time = seed;
+    }
+
+    time += 3;
+    print(time);
+  
+    if (mask == ground){
+        noiseImageLegs = noiseImageCreate(time - 70, noiseScale, coeff)
+        for (let x = 0; x < noiseImageLegs.width; x++){
+            for (let y = 0; y < noiseImageLegs.height; y++){
+                noiseImageLegs.set(x, y, color(red(colorValue), green(colorValue), blue(colorValue), alphaVal * noiseImageLegs.pixels[(y * noiseImageLegs.width + x) * 4 + 3] ) );
+            }
+        }
+        noiseImageLegs.updatePixels();
+        noiseImageLegs.mask(back);
+        blend(noiseImageLegs, 0 , 0, size, size, 0, 0, size, size, mode);
+  
+        noiseImage = noiseImageCreate(time, noiseScale, coeff)
+        for (let x = 0; x < noiseImage.width; x++){
+            for (let y = 0; y < noiseImage.height; y++){
+                noiseImage.set(x, y, color(red(colorValue), green(colorValue), blue(colorValue), alphaVal * noiseImage.pixels[(y * noiseImage.width + x) * 4 + 3] ) );
+            }
+        }
+        noiseImage.updatePixels();
+        noiseImage.mask(front);
+        blend(noiseImage, 0 , 0, size, size, 0, 0, size, size, mode);
+        //image(noiseImage, 0 , 0);
+        
+    } else if (mask == bluemask){
+        noiseImage = noiseImageCreate(time, noiseScale, coeff)
+        for (let x = 0; x < noiseImage.width; x++){
+            for (let y = 0; y < noiseImage.height; y++){
+                noiseImage.set(x, y, color(red(colorValue), green(colorValue), blue(colorValue), alphaVal * noiseImage.pixels[(y * noiseImage.width + x) * 4 + 3] ) );
+            }
+        }
+        noiseImage.updatePixels();
+        noiseImage.mask(bluemask);
+        blend(noiseImage, 0 , 0, size, size, 0, 0, size, size, mode);
+    }
+  }
   
 
   function createPet(petValue){
@@ -186,11 +233,24 @@ function setup() {
         seed = inputBox.value();
       }
     tint(0);
+
+    //noise seed scratch
     noiseSeed(noiseSeedVal);
     noiseNoise = random(-7, 0)/10;
     seed -= noiseNoise;
 
     makeNoise(0.01, 1, ground, seed);
+
+    tint(255, 238, 95);
+    //tintnoise scratch
+    tintNoise(0.01, 1, ground, seed, color(225, 228, 116), 0.4, HARD_LIGHT)
+
+    for (let x = 0; x < 5; x++){
+        for (let y = 0; y < 5; y++){
+            print((x * 30 + y) * 4 + 3)
+        }
+    }
+
     image(lines, 0, 0, size, size);
   }
 
