@@ -457,13 +457,17 @@ function createPet(petValue){
     genes += orangeTintGenes;
     print('orangeTintGenes : ' + orangeTintGenes);
 
+    var eyeYellowGenes = genesGet('a');
+    genes += eyeYellowGenes;
+    print('eyeYellowGenes : ' + eyeYellowGenes);
+
     var tealTintGenes = genesGet('a', 4);
     genes += tealTintGenes;
     print('tealTintGenes : ' + tealTintGenes);
 
-    var eyeDarkGenes = genesGet('a', 2);
-    genes += eyeDarkGenes;
-    print('eyeDarkGenes : ' + eyeDarkGenes);
+    var eyeBlueGenes = genesGet('a');
+    genes += eyeBlueGenes;
+    print('eyeBlueGenes : ' + eyeBlueGenes);
 
   } else {
     genes = inputBox.value();
@@ -969,11 +973,18 @@ function createPet(petValue){
     }
   }
 
+  //Yellow - controls layers of bright yellow. domaninant 'A' = + 20% yellow-ness
+  if (eyeYellowGenes[0] == 'A' || yellowGenes[1] == 'A'){
+    makeTint(color(255, 255, 0), 0.2, NORMAL, eye);
+  }
+
   for (i = 0; i < orangeTintAmount; i++){
     makeTint(color(255, 102, 0), 0.2, NORMAL, eye);
   }
 
   //Structure Color
+
+  //TealTint - controls layer of teal tint. recessive 'a' = +40% teal-ness
   var tealTintAmount = 0;
   for (i = 0; i < tealTintGenes.length; i+=2 ){
     if (tealTintGenes[i] == 'a' && tealTintGenes[i + 1] == 'a'){
@@ -982,16 +993,13 @@ function createPet(petValue){
   }
 
   for (i = 0; i < tealTintAmount; i++){
-    makeTint(color(130, 208, 140), 1, MULTIPLY, eye);
+    makeTint(color(130, 208, 140), 0.4, MULTIPLY, eye);
   }
 
-  var eyeDarkAlpha = 0;
-  if ((eyeDarkGenes[0] == 'A' || eyeDarkGenes[1] == 'A') && (eyeDarkGenes[2] == 'A' || eyeDarkGenes[3] == 'A')){
-    eyeDarkAlpha = 0.55;
-  } else if (eyeDarkGenes == 'aaaa'){
-    eyeDarkAlpha = 0.8;
+  //Blue - actually makes eyes lighter. recessive 'a' = +20 layer of white
+  if (eyeBlueGenes == 'aa'){ 
+    makeTint(color(0, 210, 255), 0.2, HARD_LIGHT, eye);
   }
-  makeTint(color(0), eyeDarkAlpha, MULTIPLY, eye);
 
   //Lines
   image(lines, 0, 0, size, size);
