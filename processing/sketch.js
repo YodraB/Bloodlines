@@ -305,54 +305,174 @@ function distort(sourceImage, amount, scale, mask, blendmode, colorValue){
   //console.log('distort');
 }
 
+function genesGet(arrayAlleles, geneNum){
+  if (geneNum == undefined){
+    geneNum = 1;
+  } 
+  if (arrayAlleles == 'a'){
+    arrayAlleles = ['A', 'a'];
+  }
+  var results = "";
+  for (i = 0; i < geneNum * 2; i++){
+    results += randomPick(arrayAlleles);
+  }
+  return results;
+}
+
 function createPet(petValue){
   clear();
   background(204, 229, 255);
   var genes = '';
   if (petValue == 'random'){
-    genes = randomGenes();
+    //Gene assignment
+    var groundColorGenes = genesGet(['R', 'P', 'r']);
+    genes += groundColorGenes;
+    print('groundColorGenes : ' + groundColorGenes);
+
+    var groundRecGenes = genesGet('a', 4);
+    genes += groundRecGenes;
+    print('groundRecGenes : ' + groundRecGenes);
+
+    var redPatchGenes = genesGet('a');
+    genes += redPatchGenes;
+    print('redPatchGenes : ' + redPatchGenes);
+
+    var redPatchAmountGenes = genesGet('a', 4);
+    genes += redPatchAmountGenes;
+    print('redPatchAmountGenes : ' + redPatchAmountGenes);
+
+    var blueGenes = genesGet(['B', 'y', 'b']);
+    genes += blueGenes;
+    print('blueGenes : ' + blueGenes);
+
+    var extensionGenes = genesGet(['M', 'Y', 'r']);
+    genes += extensionGenes;
+    print('extensionGenes : ' + extensionGenes);
+
+    var domBlackGenes = genesGet('a');
+    genes += domBlackGenes;
+    print('domBlackGenes : ' + domBlackGenes);
+
+    var blackPatchGenes = genesGet('a');
+    genes += blackPatchGenes;
+    print('blackPatchGenes : ' + blackPatchGenes);
+
+    var blackPatchAmountGenes = genesGet('a', 3);
+    genes += blackPatchAmountGenes;
+    print('blackPatchAmountGenes : ' + blackPatchAmountGenes);
+
+    var brownGenes = genesGet('a');
+    genes += brownGenes;
+    print('brownGenes : ' + brownGenes);
+
+    var agoutiGenes = genesGet(['Y', 'W', 't', 'a']);
+    genes += agoutiGenes;
+    print('agoutiGenes : ' + agoutiGenes);
+
+    var liverGenes = genesGet('a');
+    genes += liverGenes;
+    print('liverGenes : ' + liverGenes);
+
+    var birdDiluteGenes = genesGet(['S', 'c', 'g', 's']);
+    genes += birdDiluteGenes;
+    print('birdDiluteGenes : ' + birdDiluteGenes);
+
+    var greyGenes = genesGet('a');
+    genes += greyGenes;
+    print('greyGenes : ' + greyGenes);
+
+    var violetGenes = genesGet('a');
+    genes += violetGenes;
+    print('violetGenes : ' + violetGenes);
+
+    var darkGenes = genesGet('a');
+    genes += darkGenes;
+    print('darkGenes : ' + darkGenes);
+
+    var anthraciteGenes = genesGet('a');
+    genes += anthraciteGenes;
+    print('anthraciteGenes : ' + anthraciteGenes);
+
+    var clearGenes = genesGet('a');
+    genes += clearGenes;
+    print('clearGenes : ' + clearGenes);
+
+    var opalescentGenes = genesGet('a');
+    genes += opalescentGenes;
+    print('opalescentGenes : ' + opalescentGenes);
+
+    var tobianoGenes = genesGet('a');
+    genes += tobianoGenes;
+    print('tobianoGenes : ' + tobianoGenes);
+
+    var tobianoTweakGenes = genesGet('a', 2);
+    genes += tobianoTweakGenes;
+    print('tobianoTweakGenes : ' + tobianoTweakGenes);
+
+    var overoGenes = genesGet('a');
+    genes += overoGenes;
+    print('overoGenes : ' + overoGenes);
+
+    var overoTweakGenes = genesGet('a', 2);
+    genes += overoTweakGenes;
+    print('overoTweakGenes : ' + overoTweakGenes);
+
+    var diluteGenes = genesGet('a');
+    genes += diluteGenes;
+    print('diluteGenes : ' + diluteGenes);
+
+    var whiteFaceGenes = genesGet('a', 4);
+    genes += whiteFaceGenes;
+    print('whiteFaceGenes : ' + whiteFaceGenes);
+
+    var frontLeftSockGenes = genesGet('a', 2);
+    genes += frontLeftSockGenes;
+    print('frontLeftSockGenes : ' + frontLeftSockGenes);
+
+    var frontRightSockGenes = genesGet('a', 2);
+    genes += frontRightSockGenes;
+    print('frontRightSockGenes : ' + frontRightSockGenes);
+
+    var backLeftSockGenes = genesGet('a', 2);
+    genes += backLeftSockGenes;
+    print('backLeftSockGenes : ' + backLeftSockGenes);
+
+    var backRightSockGenes = genesGet('a', 2);
+    genes += backRightSockGenes;
+    print('backRightSockGenes : ' + backRightSockGenes);
+
+    var sockHeightGenes = genesGet('a', 2);
+    genes += sockHeightGenes;
+    print('sockHeightGenes : ' + sockHeightGenes);
+
+    var maneLightGreyGenes = genesGet('a');
+    genes += maneLightGreyGenes;
+    print('maneLightGreyGenes : ' + maneLightGreyGenes);
+
+    var maneDarkGreyGenes = genesGet('a');
+    genes += maneDarkGreyGenes;
+    print('maneDarkGreyGenes : ' + maneDarkGreyGenes);
+
+    var orangeTintGenes = genesGet('a', 5);
+    genes += orangeTintGenes;
+    print('orangeTintGenes : ' + orangeTintGenes);
+
+    var tealTintGenes = genesGet('a', 4);
+    genes += tealTintGenes;
+    print('tealTintGenes : ' + tealTintGenes);
+
+    var eyeDarkGenes = genesGet('a', 2);
+    genes += eyeDarkGenes;
+    print('eyeDarkGenes : ' + eyeDarkGenes);
+
   } else {
     genes = inputBox.value();
-  }
-  textBox.html(genes);
-  //for (i = 0; i < genes.length; i++){
-  //  console.log(i, genes[i]);
-  //}
-  console.log(genes);
 
-  //Gene assignment
-  var groundColorGenes = genes[0] + genes[1];
-  var groundRecGenes = genes.slice(2, 10);
-  var redPatchGenes = genes[10] + genes[11];
-  var redPatchAmountGenes = genes.slice(12, 18)
-  var blueGenes = genes[18] + genes[19];
-  var extensionGenes = genes[20] + genes[21];
-  var domBlackGenes = genes[22] + genes[23];
-  var blackPatchGenes = genes[24] + genes[25];
-  var blackPatchAmountGenes = genes.slice(26, 30);
-  var brownGenes = genes[30] + genes[31];
-  var agoutiGenes = genes[32] + genes[33];
-  var liverGenes = genes[34] + genes[35];
-  var birdDiluteGenes = genes[36] + genes[37];
-  var greyGenes = genes[38] + genes[39];
-  var violetGenes = genes[40] + genes[41];
-  var darkGenes = genes[42] + genes[43];
-  var anthraciteGenes = genes[44] + genes[45];
-  var clearGenes = genes[46] + genes[47];
-  var tobianoGenes = genes[48] + genes[49];
-  var overoGenes = genes[50] + genes[51];
-  var diluteGenes = genes[52] + genes[53];
-  var whiteFaceGenes = genes.slice(54, 62);
-  var frontLeftSockGenes = genes.slice(62, 66);
-  var frontRightSockGenes = genes.slice(66, 70);
-  var backLeftSockGenes = genes.slice(70, 74);
-  var backRightSockGenes = genes.slice(74, 78);
-  var sockHeightGenes = genes[79] + genes[80];
-  var opalescentGenes = genes[81] + genes[82];
-  var maneLightGreyGenes = genes[83] + genes[84];
-  var maneDarkGreyGenes = genes[85] + genes[86];
-  var tobianoTweakGenes = genes.slice(86, 90);
-  var overoTweakGenes = genes.slice(90, 94);
+    //read codes here
+  }
+
+  print('all genes : ' + genes);
+  textBox.html(genes);
 
   //Opalescent - controls color selection. 'a' recessive = active
   var opalescentOn = false;
@@ -825,9 +945,53 @@ function createPet(petValue){
 	  image(mane, 0, 0, size, size);
   }
 
-  //Eye - tint to set color
-  tint(255, 250, 205);
+  //Eye Color - tint to set color
+
+  //Eye Base Color
+	var eyeBase = color(255, 250, 205);
+  
+  //blueGenes  = 'bb';
+  //extensionGenes = 'rr';
+	if (blueGenes == 'bb' && extensionGenes == 'rr'){
+		eyeBase = color(128, 0, 0);
+  }
+  
+  //Cartenoids
+  
+  tint(eyeBase);
   image(eye, 0, 0, size, size);
+
+  //OrangeTint - controls layers of blood-orange tint. recessive 'a' = + 20% orange-ness.
+  var orangeTintAmount = 0;
+  for (i = 0; i < orangeTintGenes.length; i+=2 ){
+    if (orangeTintGenes[i] == 'a' && orangeTintGenes[i + 1] == 'a'){
+      orangeTintAmount += 1;
+    }
+  }
+
+  for (i = 0; i < orangeTintAmount; i++){
+    makeTint(color(255, 102, 0), 0.2, NORMAL, eye);
+  }
+
+  //Structure Color
+  var tealTintAmount = 0;
+  for (i = 0; i < tealTintGenes.length; i+=2 ){
+    if (tealTintGenes[i] == 'a' && tealTintGenes[i + 1] == 'a'){
+      tealTintAmount += 1;
+    }
+  }
+
+  for (i = 0; i < tealTintAmount; i++){
+    makeTint(color(130, 208, 140), 1, MULTIPLY, eye);
+  }
+
+  var eyeDarkAlpha = 0;
+  if ((eyeDarkGenes[0] == 'A' || eyeDarkGenes[1] == 'A') && (eyeDarkGenes[2] == 'A' || eyeDarkGenes[3] == 'A')){
+    eyeDarkAlpha = 0.55;
+  } else if (eyeDarkGenes == 'aaaa'){
+    eyeDarkAlpha = 0.8;
+  }
+  makeTint(color(0), eyeDarkAlpha, MULTIPLY, eye);
 
   //Lines
   image(lines, 0, 0, size, size);

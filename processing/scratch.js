@@ -70,7 +70,7 @@ function setup() {
   }
 
   function myInputEvent(){
-    console.log(this.value());
+    //console.log(this.value());
   }
   
   function draw() {
@@ -177,7 +177,7 @@ function setup() {
   function createPet(petValue){
     tint(255);
     image(ground, 0, 0, size, size);
-    let seed = 'null';
+    let seed = 7;
     let noiseSeedVal = 52;
 
     if (petValue == 'random'){
@@ -187,9 +187,14 @@ function setup() {
       }
     tint(0);
     noiseSeed(noiseSeedVal);
+    noiseNoise = random(-7, 0)/10;
+    seed -= noiseNoise;
+
     makeNoise(0.01, 1, ground, seed);
     image(lines, 0, 0, size, size);
   }
 
-  //seed should increment by 0.2 for optimum similarity/difference ratio
-  //every starter should have a different noiseSeed (?)
+  //seed should increment by 0.2 minimum, 1 maximum, for optimum similarity/difference ratio
+  //seed should also have per-individual randomness - range of +- 0.7
+  //every starter, and every random pattern, should have a different noiseSeed
+  //
