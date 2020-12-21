@@ -638,11 +638,10 @@ function createPet(petValue){
     }
   }
 
-  //Desat Ground - adds a layer of grey, effectively desaturating the ground color.
+  //Desat Ground - adds a layer of grey, effectively desaturating the ground color. 'A' dominant = + 50% greyer
   if (redOn == true && (groundColor == 'red' || groundColor == 'pink') && (desatGroundGenes[0] == 'A' || desatGroundGenes[1] == 'A')){
     makeTint(color(100), 0.5, NORMAL, blueMaskVar);
   }
-  print(desatGroundGenes)
 
   //Red Patches - controls whether patches are possible. 'A' dominant = patches
   var redPatches = false;
@@ -671,7 +670,9 @@ function createPet(petValue){
 
   //Yellow Over Patches - controls a layer of translucent yellow patches. 'aaaa' double recessive = patches present
     if (yellowPatchGenes == 'aaaa'){
-      tintNoise(0.01, 1, blueMaskVar, color(225, 228, 116), 0.4, HARD_LIGHT);
+      makeTint(color(225, 228, 116), 0.5, HARD_LIGHT, blueMaskVar);
+    } else if ((yellowPatchGenes[0] == 'aa' && yellowPatchGenes[1]) || (yellowPatchGenes[2] == 'aa' && yellowPatchGenes[3])){
+      tintNoise(0.01, 1.2, blueMaskVar, color(225, 228, 116), 0.4, HARD_LIGHT);
     }
   }
 

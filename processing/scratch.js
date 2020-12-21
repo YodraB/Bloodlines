@@ -173,6 +173,20 @@ function setup() {
     
   }
 
+  function makeTint(colorValue, alpha, mode, mask){
+    let tintImage = createImage(width, height);
+    tintImage.loadPixels();
+    for (let x = 0; x < tintImage.width; x++){
+      for (let y = 0; y < tintImage.height; y++){
+        tintImage.set(x, y, color(red(colorValue), green(colorValue), blue(colorValue), alpha * 255));
+      }
+    }
+    tintImage.updatePixels();
+    tintImage.mask(mask);
+    blend(tintImage, 0, 0, size, size, 0, 0, size, size, mode);
+  }
+  
+
   function tintNoise(noiseScale, coeff, mask, seed, colorValue, alphaVal, mode){
     let time = new Date;
 
@@ -245,11 +259,7 @@ function setup() {
     //tintnoise scratch
     tintNoise(0.01, 1, ground, seed, color(225, 228, 116), 0.4, HARD_LIGHT)
 
-    for (let x = 0; x < 5; x++){
-        for (let y = 0; y < 5; y++){
-            print((x * 30 + y) * 4 + 3)
-        }
-    }
+    makeTint(color(100), 0.5, NORMAL, ground);
 
     image(lines, 0, 0, size, size);
   }
