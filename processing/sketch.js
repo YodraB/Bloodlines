@@ -130,37 +130,6 @@ function randomPick(array) {
 	return array[randomNumber];
 }
 
-function randomGenes(){
-  var genotype = "";
-  var geneList = [];
-  
-  var redGround = ['R', 'P', 'r'];
-  var blue = ['B', 'y', 'b'];
-  var extension = ['M', 'E', 'r'];
-  var agoutiGen = ['Y', 'W', 't', 'a'];
-  var birdDilute = ['S', 'c', 'g', 's'];
-  
-
-	for (i = 0; i < 94; i++){ //47 genes (94 alleles)
-    if (i == 0 || i == 1){
-      geneList = redGround;
-    } else if (i == 18 || i == 19) {
-      geneList = blue;
-    } else if (i == 20 || i == 21){
-      geneList = extension;
-    } else if (i == 32 || i == 33){
-      geneList = agoutiGen;
-    } else if (i == 36 || i == 37){
-      geneList = birdDilute;
-    } else {
-      geneList = ['A', 'a'];
-    }
-    
-		genotype += randomPick(geneList);
-  	}
-    return genotype;
-}
-
 function noiseImageCreate(time, noiseScale, coeff){
   let noiseImage = createImage(width, height, RGB);
   noiseImage.loadPixels();
@@ -445,7 +414,7 @@ function createPet(petValue){
     genes += anthraciteGenes;
     print('anthraciteGenes : ' + anthraciteGenes);
 
-    var clearGenes = genesGet('a');
+    var clearGenes = genesGet(['A', 't', 'a']);
     genes += clearGenes;
     print('clearGenes : ' + clearGenes);
 
@@ -525,6 +494,8 @@ function createPet(petValue){
     genes = inputBox.value();
 
     //read codes here
+    var groundColorGenes = genes[0] + genes[1];
+    console.log(groundColorGenes)
   }
 
   print('all genes : ' + genes);
@@ -822,8 +793,10 @@ function createPet(petValue){
   }
 
   //Base blue here
-  if (blueOn){
-    makeTint(blueColor, blueAlpha, HARD_LIGHT, ground);
+  if (blueOn && (clearGenes[0] == 't' && clearGenes[1] == 't')){
+    makeTint(blueColor, blueAlpha, HARD_LIGHT, blueMaskVar);
+  } else if (blueOn){
+	  makeTint(blueColor, blueAlpha, HARD_LIGHT, ground);
   }
 
   //Dark - controls a layer of dark tint. 'AA' dominant = 25% darker. 'Aa' or 'aA' codominant = 12% darker. 
