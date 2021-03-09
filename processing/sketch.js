@@ -528,8 +528,6 @@ function createPet(petValue){
     print('blackPatchGenes : ' + blackPatchGenes);
 
     var blackPatchAmountGenes = genes.slice(38, 44);
-    genesGet('a', 3);
-    genes += blackPatchAmountGenes;
     print('blackPatchAmountGenes : ' + blackPatchAmountGenes);
 
     var brownGenes = genes.slice(44, 46);
