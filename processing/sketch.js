@@ -756,7 +756,7 @@ function createPet(petValue){
   //Yellow Over Patches - controls a layer of translucent yellow patches. 'aaaa' double recessive = patches present
     if (yellowPatchGenes == 'aaaa'){
       makeTint(color(225, 228, 116), 0.5, HARD_LIGHT, blueMaskVar);
-    } else if ((yellowPatchGenes[0] == 'aa' && yellowPatchGenes[1]) || (yellowPatchGenes[2] == 'aa' && yellowPatchGenes[3])){
+    } else if ((yellowPatchGenes[0] == 'a') && (yellowPatchGenes[1] == 'a') || (yellowPatchGenes[2] == 'a') && (yellowPatchGenes[3] == 'a')){
       tintNoise(0.01, 1.2, blueMaskVar, color(225, 228, 116), 0.4, HARD_LIGHT);
     }
   }
@@ -957,6 +957,9 @@ function createPet(petValue){
   
   //Overo - controls small patches of white. 'a' recessive = patches present
   var overoOn = false;
+  if (overoGenes[0] == 'a' && overoGenes[1] == 'a'){
+    overoOn = true;
+  }
 
   //OveroTweak - controls spread of overo. 'a' recessive = +1 overo patches (max 2)
   var overoAmount = 0;
@@ -965,10 +968,6 @@ function createPet(petValue){
     if (overoTweakGenes[i] == 'a' && overoTweakGenes[i + 1] == 'a'){
       overoAmount += 1;
     }
-  }
-
-  if (overoGenes[0] == 'a' && overoGenes[1] == 'a'){
-    overoOn = true;
   }
 
   if (overoAmount == 0 && overoOn == true){
