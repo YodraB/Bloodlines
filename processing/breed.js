@@ -1,3 +1,5 @@
+// add new code boxes to sketch, parent one and parent two, print chop from original code box
+
 function show(){
 	genotypeA = document.getElementById("Pet A").value;
 	genotypeB = document.getElementById("Pet B").value;
@@ -15,7 +17,7 @@ function show(){
 }
 
 function chopCode(){
-	chop.innerHTML += ""
+	chop.innerHTML = ""
 	genes = document.getElementById("codeForChop").value;
 	
 	print('PHAEOMELANIN<br>');
@@ -214,11 +216,10 @@ function chopCode(){
     print('clearGenes : ' + clearGenes + ' - ultrastructure ' + clear);
 
     var opalescentGenes = genes.slice(62, 64);
+	var opalescentOn = 'No'
 	if (opalescentGenes[0] == 'a' && opalescentGenes[1] == 'a'){
-    	var opalescent = 'Positive';
-	} else {
-		var opalescent = 'Negative';
-	}
+    	var opalescent = 'Yes';
+	} 
     print('opalescentGenes : ' + opalescentGenes + " - opalescent factor " + opalescent);
 	
 	print('<br>WHITE<br>');
