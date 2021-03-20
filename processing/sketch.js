@@ -924,6 +924,7 @@ function mutpress(){
   }
 
   var ReadoutMut = codeGenes(genesMut);
+  inputBox.value(genesMut);
   print(genesMut);
   print('mut done');
   textBox.html(ReadoutMut);
