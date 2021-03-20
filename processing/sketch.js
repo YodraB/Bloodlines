@@ -7,6 +7,7 @@ var saveOver = false;
 let imgSize = 2048;
 let inputBox;
 let textBox;
+let codeCount = 1;
 
 function preload(){
   ground = loadImage('images/Khundii_Base.png');
@@ -114,7 +115,7 @@ function breedpress(){
 }
 
 function myInputEvent(){
-  console.log(this.value());
+
 }
 
 function draw() {
@@ -500,8 +501,6 @@ function randGenes(){
 }
 
 function codeGenes(genes){
-  var genes = inputBox.value();
-
   //***read codes
   var groundColorGenes = genes.slice(0,2);
   
@@ -580,6 +579,9 @@ function codeGenes(genes){
   var tealTintGenes = genes.slice(122, 130);
   
   var eyeBlueGenes = genes.slice(130, 132);
+  
+  var extraGenes = genes.slice(132, genes.length);
+  print(extraGenes);
 
 
   //***Analyse gene output
@@ -899,23 +901,32 @@ function codeGenes(genes){
 	
 	Readout += '<br>MUTATIONS<br><br>';
 	
-	var extraGenesDisplay = genes.slice(132, genes.length);
-	Readout += 'extraGenes: ' + extraGenesDisplay;
+	
+	Readout += 'extraGenes: ' + extraGenes;
 
   return Readout;
 }
 
+//***Mutation1
 function mutpress(){
-	distort(whitetips, 100, 0.002, tipsmask, NORMAL, color(255));
-  tint(0);
-  image(lines, 0, 0, size, size);
   var genes = inputBox.value();
+  var genesMut = genes;
   if(genes.slice(132, 134) == ''){
-    genes += 'nn';
+    genesMut += 'nn';
+  } else if (genesMut.slice(132, 134) == 'xx'){
+	  genesBase = genesMut.slice(0, 132);
+	  genesExtend = genesMut.slice(134, genesMut.length);
+	  genesMut = genesBase + 'nn' + genesExtend;
   }
-  var Readout = codeGenes(genes);
-  print('all genes : ' + genes);
-  textBox.html(Readout);
+  if (genesMut.slice(132, 134) == 'nn'){
+    distort(whitetips, 100, 0.002, tipsmask, NORMAL, color(255));
+    image(lines, 0, 0, size, size);
+  }
+
+  var ReadoutMut = codeGenes(genesMut);
+  print(genesMut);
+  print('mut done');
+  textBox.html(ReadoutMut);
 }
 
 function createPet(petValue){
@@ -1015,7 +1026,7 @@ function createPet(petValue){
   inputBox.value(genes);
   var Readout = codeGenes(genes);
   
-  print('all genes : ' + genes);
+  print(genes);
   textBox.html(Readout);
 
   //***Genes to output
@@ -1572,5 +1583,6 @@ function createPet(petValue){
   //Lines
   image(lines, 0, 0, size, size);
 
-  console.log('done');
+  console.log('done: ' + codeCount);
+  codeCount += 1;
 }
