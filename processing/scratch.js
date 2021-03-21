@@ -253,15 +253,18 @@ function setup() {
     noiseNoise = random(-7, 0)/10;
     seed -= noiseNoise;
 
-    makeNoise(0.01, 1, ground, seed);
-
     tint(255, 238, 95);
     //tintnoise scratch
-    tintNoise(0.01, 1, ground, seed, color(225, 228, 116), 0.4, HARD_LIGHT)
+    makeTint(color(255, 228, 116), 1, NORMAL, ground);
+	
+	//tintpatches uses one like below
+	tintNoise(0.01, 1, ground, seed, color(0), 0.7, NORMAL);
+	tintNoise(0.01, 1, ground, seed+7, color(0), 0.7, NORMAL);
 
-    makeTint(color(100), 0.5, NORMAL, ground);
+    //makeTint(color(100), 0.5, NORMAL, ground);
 
     image(lines, 0, 0, size, size);
+	console.log('done');
   }
 
   //seed should increment by 0.2 minimum, 1 maximum, for optimum similarity/difference ratio

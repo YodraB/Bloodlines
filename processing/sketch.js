@@ -17,6 +17,7 @@ function preload(){
   backleft = loadImage('images/Khundii_BackLeft.png');
   backright = loadImage('images/Khundii_BackRight.png');
   bluemask = loadImage('images/Khundii_BlueMask.png');
+  redstripe = loadImage('images/Khundii_RedStripe.png');
   extension = loadImage('images/Khundii_Extension.png');
   exmask = loadImage('images/Khundii_ExMask.png');
   tips = loadImage('images/Khundii_Tips.png');
@@ -63,10 +64,12 @@ function setup() {
   breedButton = createButton('breed');
   breedButton.mousePressed(breedpress)
   
-  //mutation buttons here
+  //***buttons here
   createElement('br');
   mutButton = createButton('mut 1');
-  mutButton.mousePressed(mutpress);
+  mutButton.mousePressed(mutpress1);
+  mutButton2 = createButton('mut 2');
+  mutButton2.mousePressed(mutpressA2);
   
   textBox = createElement('p');
   createElement('br');
@@ -79,6 +82,10 @@ function randompress() {
 
 function codepress() {
   createPet('code');
+}
+
+function mutpressA2(){
+	createPet('mut2');
 }
 
 function breedpress(){
@@ -581,7 +588,6 @@ function codeGenes(genes){
   var eyeBlueGenes = genes.slice(130, 132);
   
   var extraGenes = genes.slice(132, genes.length);
-  print(extraGenes);
 
 
   //***Analyse gene output
@@ -908,7 +914,7 @@ function codeGenes(genes){
 }
 
 //***Mutation1
-function mutpress(){
+function mutpress1(){
   var genes = inputBox.value();
   var genesMut = genes;
   if(genes.slice(132, 134) == ''){
@@ -930,14 +936,31 @@ function mutpress(){
   textBox.html(ReadoutMut);
 }
 
+//***Mutation2
+function mutpress2(){
+	var genes = inputBox.value();
+	var genesMut = genes;
+  if(genes.slice(132, 134) == ''){
+    genesMut += 'xx';
+  }
+  if (genesMut.slice(134, 142) == ''){
+	  genesBase = genesMut.slice(0, 134);
+	  genesExtend = genesMut.slice(140, genesMut.length);
+	  genesMut = genesBase + 'nnnnnnnx' + genesExtend;
+  }
+  return genesMut;
+}
+
 function createPet(petValue){
   clear();
   background(204, 229, 255);
   var genes = '';
   if (petValue == 'random'){
     genes = randGenes();
-  } else {
+  } else if (petValue == 'code'){
     var genes = inputBox.value();
+  } else if (petValue == 'mut2'){
+	  genes = mutpress2();
   }
 
   //***read codes second time
@@ -1024,6 +1047,11 @@ function createPet(petValue){
     whiteTipGenes == 'xx';
   }
   
+  var redStripeGenes = genes.slice(134, 142);
+  if(redStripeGenes ==''){
+	  redStripeGenes == 'xxxxxxxx';
+  }
+  
   inputBox.value(genes);
   var Readout = codeGenes(genes);
   
@@ -1074,6 +1102,7 @@ function createPet(petValue){
     }
   }
   
+  //***Red color value
   var redColorValue = [0, 0, 0];
   var pinkColorValue = [0, 0, 0];
   if (groundRec == 4){
@@ -1177,6 +1206,26 @@ function createPet(petValue){
       tintNoise(0.01, 1.2, blueMaskVar, color(225, 228, 116), 0.4, HARD_LIGHT);
     }
   }
+  
+  //Red over patches - controls up to 3 layers of translucent red patches
+  var redStripeAmount = 0;
+  for (i = 0; i < redStripeGenes.length; i+=2 ){
+    if (redStripeGenes[i] == 'n' && redStripeGenes[i + 1] == 'n'){
+      redStripeAmount += 1;
+    }
+  }
+  if (redOn == true && redStripeAmount>0){
+    if (redStripeAmount == 1){
+      makeTint(color(255, 207, 102), 1, OVERLAY, redstripe);
+    } else if (redStripeAmount == 2){
+      makeTint(color(255, 102, 0), 1, OVERLAY, redstripe);
+    } else if (redStripeAmount == 3){
+      makeTint(color(255, 0, 0), 1, OVERLAY, redstripe);
+    } else if (redStripeAmount == 4){
+      makeTint(color(179, 0, 0), 1, OVERLAY, redstripe);
+    }
+  }
+  
 
   //EUMELANIN
 
@@ -1245,10 +1294,10 @@ function createPet(petValue){
   }
 
   tint(blackColor);
-  if (blackPatches == true && blackPatchAmount == 1){
-    makeNoise(0.01, 0.8, ground);
-  } else if (blackPatches == true && blackPatchAmount == 2) {
-    makeNoise(0.01, 1, ground);
+  if (blackPatches == true){
+	  for(i=0; i<blackPatchAmount;i++){
+		  makeNoise(0.01, 0.8, ground);
+	  }
   }
 
   //Agouti - controls most eumealin patterns. 'Y' dominant = black tips. 'W' mid 1 = agouti. 't' mid 2 = tan tips. 
