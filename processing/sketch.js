@@ -98,7 +98,8 @@ function mutpressA3(){
 }
 
 function mutpressA4(){
-	stripeGen(0.07,0.3,280,350)
+	//image(ground, 0, 0, size, size);
+	stripeGen(0.01,0.2,280,350)
 }
 
 function breedpress(){

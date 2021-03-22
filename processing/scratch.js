@@ -295,7 +295,7 @@ function setup() {
     //makeTint(color(100), 0.5, NORMAL, ground);
 	
 	//stripetests
-	stripeGen(0.07,0.3,280,350);
+	stripeGen(0.2,0.2,280,350);
 
     image(lines, 0, 0, size, size);
 	console.log('done');
