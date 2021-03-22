@@ -235,34 +235,37 @@ function setup() {
     }
   }
   
-  function stripeGen(minIncrement, maxIncrement, minStripeLength, maxStripeLength){
-	  let amplitude=1;
-	  let theta = 0;
-	  let increment = random(minIncrement, maxIncrement); //random(0.07,0.3)
-	  let stripeLength = random(minStripeLength, maxStripeLength);//random(280, 350);
-	  
-	  let img = createImage(width, height);
-	  img.loadPixels();
-	  for (let i = 0; i < img.width; i++) {
-  		for (let j = 0; j < img.height; j++) {
-			
-			pixColor = color(0);
-			
-			theta += increment/width;
-    		let lineVal = (sin(theta)*amplitude);
-			
-			var ySet = (height-stripeLength)+(-i*0.15)-(lineVal*100)
-			if (j<245 || j>ySet){
-				pixColor = color(0,0,0,0);
-			}
-			
-			
-    		img.set(i, j, pixColor);
-  		}
-	  }
-	img.updatePixels();
-	img.mask(bodystripemask);
-	image(img, 0, 0);
+  
+
+function stripeGen2(minIncrement, maxIncrement, minStripeLength, maxStripeLength, colorVal){
+  let amplitude=1;
+  let theta = 0;
+  let increment = random(minIncrement, maxIncrement); //random(0.07,0.3)
+  let stripeLength = random(minStripeLength, maxStripeLength);//random(280, 350);
+  console.log(increment,stripeLength);
+  
+  let img = createImage(width, height);
+  img.loadPixels();
+  for (let i = 0; i < img.width; i++) {
+    for (let j = 0; j < img.height; j++) {
+    
+    pixColor = colorVal;
+    
+    theta += increment/width;
+      let lineVal = (sin(theta)*amplitude);
+    
+    var ySet = (height-stripeLength)+(-i*0.15)-(lineVal*100)
+    if (j<245 || j>ySet){
+      pixColor = color(0,0,0,0);
+    }
+    
+    
+      img.set(i, j, pixColor);
+    }
+  }
+img.updatePixels();
+img.mask(bodystripemask);
+image(img, 0, 0);
 }
   
 
@@ -295,7 +298,7 @@ function setup() {
     //makeTint(color(100), 0.5, NORMAL, ground);
 	
 	//stripetests
-	stripeGen(0.2,0.2,280,350);
+	stripeGen2(0.2,0.2,280,350,color(0));
 
     image(lines, 0, 0, size, size);
 	console.log('done');

@@ -98,8 +98,7 @@ function mutpressA3(){
 }
 
 function mutpressA4(){
-	//image(ground, 0, 0, size, size);
-	stripeGen(0.01,0.2,280,350)
+	createPet('mut4');
 }
 
 function breedpress(){
@@ -381,18 +380,19 @@ function distort(sourceImage, amount, scale, mask, blendmode, colorValue){
   //console.log('distort');
 }
 
-function stripeGen(minIncrement, maxIncrement, minStripeLength, maxStripeLength){
+function stripeGen(minStripeLength, maxStripeLength, minIncrement, maxIncrement, colorVal){
 	  let amplitude=1;
 	  let theta = 0;
 	  let increment = random(minIncrement, maxIncrement); //random(0.07,0.3)
 	  let stripeLength = random(minStripeLength, maxStripeLength);//random(280, 350);
+    //console.log(increment,stripeLength);
 	  
 	  let img = createImage(width, height);
 	  img.loadPixels();
 	  for (let i = 0; i < img.width; i++) {
   		for (let j = 0; j < img.height; j++) {
 			
-			pixColor = color(0);
+			pixColor = colorVal;
 			
 			theta += increment/width;
     		let lineVal = (sin(theta)*amplitude);
@@ -633,9 +633,15 @@ function codeGenes(genes){
   
   var whiteTipGenes = genes.slice(132, 134);
   
-  var redStripeGenes = genes.slice(134, 142);
+  var redDorsalGenes = genes.slice(134, 142);
   
-  var blackStripeGenes = genes.slice(142, 144);
+  var blackDorsalGenes = genes.slice(142, 144);
+
+  var blackBodyStripeLengthGenes = genes.slice(144,146);
+
+  var blackBodyStripeAmountGenes = genes.slice(146,148);
+
+  var blackBodyStripeGenes = genes.slice(148,150);
 
 
   //***Analyse gene output
@@ -964,22 +970,43 @@ function codeGenes(genes){
 	
 	var redStripeVal = 'No mutation';
 	var redStripeAmountVal = 0;
-    for (i = 0; i < redStripeGenes.length; i+=2 ){
-    	if (redStripeGenes[i] == 'n' && redStripeGenes[i + 1] == 'n'){
+    for (i = 0; i < redDorsalGenes.length; i+=2 ){
+    	if (redDorsalGenes[i] == 'n' && redDorsalGenes[i + 1] == 'n'){
       		redStripeAmountVal += 1;
     	}
 	}
 	if (redStripeAmountVal != 0){
 		redStripeVal = 'On, intensity ' + redStripeAmountVal;
 	}
-	Readout += 'redStripeGenes : ' + redStripeGenes + ' - red dorsal stripe ' + redStripeVal + '<br>';
+	Readout += 'redDorsalGenes : ' + redDorsalGenes + ' - red dorsal stripe ' + redStripeVal + '<br>';
 	
 	var blackStripeOn = 'No mutation';
-	if (blackStripeGenes == 'nn'){
+	if (blackDorsalGenes == 'nn'){
 		blackStripeOn = 'Yes';
 	}
-	Readout += 'blackStripeGenes : ' + blackStripeGenes + ' - black dorsal stripe ' + blackStripeOn + '<br>';
+  Readout += 'blackDorsalGenes : ' + blackDorsalGenes + ' - black dorsal stripe ' + blackStripeOn + '<br>';
 
+  var blackBodyStripeLengthVal = 'Long';
+  if (blackBodyStripeLengthGenes == 'xn' || blackBodyStripeLengthGenes == 'nx'){
+    blackBodyStripeLengthVal = 'Medium';
+  } else if (blackBodyStripeLengthGenes == 'nn'){
+    blackBodyStripeLengthVal = 'Short';
+  }
+  Readout += 'blackBodyStripeLengthGenes : ' + blackBodyStripeLengthGenes + ' - black body stripes length ' + blackBodyStripeLengthVal + '<br>';
+
+  var blackBodyStripeAmountVal = 'Many';
+  if (blackBodyStripeAmountGenes[0] == 'n' || blackBodyStripeAmountGenes[1] == 'n'){
+    blackBodyStripeAmountVal = 'Few';
+  }
+  Readout += 'blackBodyStripeAmountGenes : ' + blackBodyStripeAmountGenes + ' - black body stripes amount ' + blackBodyStripeAmountVal + '<br>';
+
+  var blackBodyStripeOn = "Off";
+  if (blackBodyStripeGenes == 'nn'){
+    blackBodyStripeOn = "On";
+  }
+  Readout += 'blackBodyStripeGenes : ' + blackBodyStripeGenes + ' - black body stripes ' + blackBodyStripeOn + '<br>';
+  
+  //***Readout End
   return Readout;
 }
 
@@ -1006,7 +1033,6 @@ function mutpress1(){
   textBox.html(ReadoutMut);
 }
 
-//***Mutation2
 function mutpress2(){
 	var genes = inputBox.value();
 	var genesMut = genes;
@@ -1039,6 +1065,28 @@ function mutpress3(){
   return genesMut;
 }
 
+function mutpress4(){
+	var genes = inputBox.value();
+	var genesMut = genes;
+  if(genes.slice(132, 134) == ''){
+    genesMut += 'xx';
+  }
+  if (genesMut.slice(134, 142) == ''){
+	  genesMut += 'xxxxxxxx';
+  }
+  if (genesMut.slice(142,144) == ''){
+	  genesMut += 'xx';
+  }
+  146,148
+  if (genesMut.slice(144, 150) == '' || genesMut.slice(144, 150) == 'xxxxxx'){
+    genesBase = genesMut.slice(0, 144);
+	  genesExtend = genesMut.slice(150, genesMut.length);
+	  genesMut = genesBase + 'nxnxnn' + genesExtend;
+  }
+  
+  return genesMut;
+}
+
 function createPet(petValue){
   clear();
   background(204, 229, 255);
@@ -1051,6 +1099,8 @@ function createPet(petValue){
 	  genes = mutpress2();
   } else if (petValue == 'mut3'){
 	  genes = mutpress3();
+  } else if (petValue == 'mut4'){
+    genes = mutpress4();
   }
   //***read codes second time
   var groundColorGenes = genes.slice(0,2);
@@ -1136,15 +1186,30 @@ function createPet(petValue){
     whiteTipGenes == 'xx';
   }
   
-  var redStripeGenes = genes.slice(134, 142);
-  if(redStripeGenes ==''){
-	  redStripeGenes == 'xxxxxxxx';
+  var redDorsalGenes = genes.slice(134, 142);
+  if(redDorsalGenes ==''){
+	  redDorsalGenes == 'xxxxxxxx';
   }
   
-  var blackStripeGenes = genes.slice(142, 144);
-  if (blackStripeGenes == ''){
-    blackStripeGenes == 'xx';
-}
+  var blackDorsalGenes = genes.slice(142, 144);
+  if (blackDorsalGenes == ''){
+    blackDorsalGenes == 'xx';
+  }
+
+  var blackBodyStripeLengthGenes = genes.slice(144,146);
+  if (blackBodyStripeLengthGenes == ''){
+    blackBodyStripeLengthGenes = 'xx';
+  }
+
+  var blackBodyStripeAmountGenes = genes.slice(146,148);
+  if (blackBodyStripeAmountGenes == ''){
+    blackBodyStripeAmountGenes = 'xx';
+  }
+
+  var blackBodyStripeGenes = genes.slice(148,150);
+  if (blackBodyStripeGenes == ''){
+    blackBodyStripeGenes = 'xx';
+  }
   
   inputBox.value(genes);
   var Readout = codeGenes(genes);
@@ -1303,8 +1368,8 @@ function createPet(petValue){
   
   //Red over patches - controls up to 3 layers of translucent red patches
   var redStripeAmount = 0;
-  for (i = 0; i < redStripeGenes.length; i+=2 ){
-    if (redStripeGenes[i] == 'n' && redStripeGenes[i + 1] == 'n'){
+  for (i = 0; i < redDorsalGenes.length; i+=2 ){
+    if (redDorsalGenes[i] == 'n' && redDorsalGenes[i + 1] == 'n'){
       redStripeAmount += 1;
     }
   }
@@ -1406,8 +1471,33 @@ function createPet(petValue){
   }
   
   //Mut 3 black dorsal stripe
-  if (blackStripeGenes== 'nn'){
+  if (blackDorsalGenes == 'nn'){
 	  makeTint(color(19), blackAlpha, NORMAL, blackstripe);
+  }
+
+  //Mut 4 black body stripes length - codominant, n makes stripes shorter
+  var blackBodyStripeMin = 280;
+  var blackBodyStripeMax = 305;
+  if (blackBodyStripeLengthGenes == 'nn'){
+    blackBodyStripeMin = 330;
+    blackBodyStripeMax = 350;
+  } else if (blackBodyStripeLengthGenes == 'xn' || blackBodyStripeLengthGenes == 'nx'){
+    blackBodyStripeMin = 305;
+    blackBodyStripeMax = 330;
+  }
+
+  //Body stripes amount - n dominant makes more stripes
+  var blackBodyStripeAmountMin = 0.1;
+  var blackBodyStripeAmountMax = 0.12;
+  if (blackBodyStripeAmountGenes == 'xx'){
+    blackBodyStripeAmountMin = 0.125;
+    blackBodyStripeAmountMax = 0.15;
+  }
+
+  //Body stripes presence - n recessive makes stripes
+  if (blackBodyStripeGenes == 'nn'){
+    stripeGen(blackBodyStripeMin,blackBodyStripeMax,blackBodyStripeAmountMin,blackBodyStripeAmountMax,blackColor);
+    //console.log(blackBodyStripeMin,blackBodyStripeMax,blackBodyStripeAmountMin,blackBodyStripeAmountMax,blackColor);
   }
 
   // ULTRASTRUCTURE
