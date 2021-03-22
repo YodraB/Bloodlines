@@ -15,6 +15,7 @@ function preload(){
     frontleft = loadImage('images/Khundii_FrontLeft.png');
     backleft = loadImage('images/Khundii_BackLeft.png');
     backright = loadImage('images/Khundii_BackRight.png');
+	bodystripemask = loadImage('images/Khundii_BodyStripeMask.png'); //***
     bluemask = loadImage('images/Khundii_BlueMask.png');
     extension = loadImage('images/Khundii_Extension.png');
     exmask = loadImage('images/Khundii_ExMask.png');
@@ -234,9 +235,39 @@ function setup() {
     }
   }
   
+  function stripeGen(minIncrement, maxIncrement, minStripeLength, maxStripeLength){
+	  let amplitude=1;
+	  let theta = 0;
+	  let increment = random(minIncrement, maxIncrement); //random(0.07,0.3)
+	  let stripeLength = random(minStripeLength, maxStripeLength);//random(280, 350);
+	  
+	  let img = createImage(width, height);
+	  img.loadPixels();
+	  for (let i = 0; i < img.width; i++) {
+  		for (let j = 0; j < img.height; j++) {
+			
+			pixColor = color(0);
+			
+			theta += increment/width;
+    		let lineVal = (sin(theta)*amplitude);
+			
+			var ySet = (height-stripeLength)+(-i*0.15)-(lineVal*100)
+			if (j<245 || j>ySet){
+				pixColor = color(0,0,0,0);
+			}
+			
+			
+    		img.set(i, j, pixColor);
+  		}
+	  }
+	img.updatePixels();
+	img.mask(bodystripemask);
+	image(img, 0, 0);
+}
+  
 
   function createPet(petValue){
-    tint(255);
+    //tint(255);
     image(ground, 0, 0, size, size);
     let seed = 7;
     let noiseSeedVal = 52;
@@ -246,22 +277,25 @@ function setup() {
       } else {
         seed = inputBox.value();
       }
-    tint(0);
+    //tint(0);
 
     //noise seed scratch
     noiseSeed(noiseSeedVal);
     noiseNoise = random(-7, 0)/10;
     seed -= noiseNoise;
 
-    tint(255, 238, 95);
+    //tint(255,255,255);
     //tintnoise scratch
-    makeTint(color(255, 228, 116), 1, NORMAL, ground);
+    //makeTint(color(255, 228, 116), 1, NORMAL, ground);
 	
 	//tintpatches uses one like below
-	tintNoise(0.01, 1, ground, seed, color(0), 0.7, NORMAL);
-	tintNoise(0.01, 1, ground, seed+7, color(0), 0.7, NORMAL);
+	//tintNoise(0.01, 1, ground, seed, color(0), 0.7, NORMAL);
+	//tintNoise(0.01, 1, ground, seed+7, color(0), 0.7, NORMAL);
 
     //makeTint(color(100), 0.5, NORMAL, ground);
+	
+	//stripetests
+	stripeGen(0.07,0.3,280,350);
 
     image(lines, 0, 0, size, size);
 	console.log('done');

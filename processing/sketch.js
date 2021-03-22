@@ -16,8 +16,10 @@ function preload(){
   frontleft = loadImage('images/Khundii_FrontLeft.png');
   backleft = loadImage('images/Khundii_BackLeft.png');
   backright = loadImage('images/Khundii_BackRight.png');
+  bodystripemask = loadImage('images/Khundii_BodyStripeMask.png');
   bluemask = loadImage('images/Khundii_BlueMask.png');
   redstripe = loadImage('images/Khundii_RedStripe.png');
+  blackstripe = loadImage('images/Khundii_ThinStripe.png');
   extension = loadImage('images/Khundii_Extension.png');
   exmask = loadImage('images/Khundii_ExMask.png');
   tips = loadImage('images/Khundii_Tips.png');
@@ -66,11 +68,14 @@ function setup() {
   
   //***buttons here
   createElement('br');
-  mutButton = createButton('mut 1');
+  mutButton = createButton('white tips');
   mutButton.mousePressed(mutpress1);
-  mutButton2 = createButton('mut 2');
+  mutButton2 = createButton('red stripe');
   mutButton2.mousePressed(mutpressA2);
-  
+  mutButton3 = createButton('black stripe');
+  mutButton3.mousePressed(mutpressA3);
+  mutButton4 = createButton('body stripes');
+  mutButton4.mousePressed(mutpressA4);
   textBox = createElement('p');
   createElement('br');
   image(lines, 0, 0, size, size);
@@ -86,6 +91,14 @@ function codepress() {
 
 function mutpressA2(){
 	createPet('mut2');
+}
+
+function mutpressA3(){
+	createPet('mut3');
+}
+
+function mutpressA4(){
+	stripeGen(0.07,0.3,280,350)
 }
 
 function breedpress(){
@@ -367,6 +380,36 @@ function distort(sourceImage, amount, scale, mask, blendmode, colorValue){
   //console.log('distort');
 }
 
+function stripeGen(minIncrement, maxIncrement, minStripeLength, maxStripeLength){
+	  let amplitude=1;
+	  let theta = 0;
+	  let increment = random(minIncrement, maxIncrement); //random(0.07,0.3)
+	  let stripeLength = random(minStripeLength, maxStripeLength);//random(280, 350);
+	  
+	  let img = createImage(width, height);
+	  img.loadPixels();
+	  for (let i = 0; i < img.width; i++) {
+  		for (let j = 0; j < img.height; j++) {
+			
+			pixColor = color(0);
+			
+			theta += increment/width;
+    		let lineVal = (sin(theta)*amplitude);
+			
+			var ySet = (height-stripeLength)+(-i*0.15)-(lineVal*100)
+			if (j<245 || j>ySet){
+				pixColor = color(0,0,0,0);
+			}
+			
+			
+    		img.set(i, j, pixColor);
+  		}
+	  }
+	img.updatePixels();
+	img.mask(bodystripemask);
+	image(img, 0, 0);
+}
+
 function genesGet(arrayAlleles, geneNum){
   if (geneNum == undefined){
     geneNum = 1;
@@ -587,7 +630,11 @@ function codeGenes(genes){
   
   var eyeBlueGenes = genes.slice(130, 132);
   
-  var extraGenes = genes.slice(132, genes.length);
+  var whiteTipGenes = genes.slice(132, 134);
+  
+  var redStripeGenes = genes.slice(134, 142);
+  
+  var blackStripeGenes = genes.slice(142, 144);
 
 
   //***Analyse gene output
@@ -908,7 +955,29 @@ function codeGenes(genes){
 	Readout += '<br>MUTATIONS<br><br>';
 	
 	
-	Readout += 'extraGenes: ' + extraGenes;
+	var whiteTipsOn = 'No mutation';
+	if (whiteTipGenes == 'nn'){
+		whiteTipsOn = 'Yes';
+	}
+	Readout += 'whiteTipsGenes : ' + whiteTipGenes + ' - white tips ' + whiteTipsOn + '<br>';
+	
+	var redStripeVal = 'No mutation';
+	var redStripeAmountVal = 0;
+    for (i = 0; i < redStripeGenes.length; i+=2 ){
+    	if (redStripeGenes[i] == 'n' && redStripeGenes[i + 1] == 'n'){
+      		redStripeAmountVal += 1;
+    	}
+	}
+	if (redStripeAmountVal != 0){
+		redStripeVal = 'On, intensity ' + redStripeAmountVal;
+	}
+	Readout += 'redStripeGenes : ' + redStripeGenes + ' - red dorsal stripe ' + redStripeVal + '<br>';
+	
+	var blackStripeOn = 'No mutation';
+	if (blackStripeGenes == 'nn'){
+		blackStripeOn = 'Yes';
+	}
+	Readout += 'blackStripeGenes : ' + blackStripeGenes + ' - black dorsal stripe ' + blackStripeOn + '<br>';
 
   return Readout;
 }
@@ -943,11 +1012,29 @@ function mutpress2(){
   if(genes.slice(132, 134) == ''){
     genesMut += 'xx';
   }
-  if (genesMut.slice(134, 142) == ''){
+  if (genesMut.slice(134, 142) == '' || genesMut.slice(134, 142) == 'xxxxxxxx'){
 	  genesBase = genesMut.slice(0, 134);
-	  genesExtend = genesMut.slice(140, genesMut.length);
+	  genesExtend = genesMut.slice(142, genesMut.length);
 	  genesMut = genesBase + 'nnnnnnnx' + genesExtend;
   }
+  return genesMut;
+}
+
+function mutpress3(){
+	var genes = inputBox.value();
+	var genesMut = genes;
+  if(genes.slice(132, 134) == ''){
+    genesMut += 'xx';
+  }
+  if (genesMut.slice(134, 142) == ''){
+	  genesMut += 'xxxxxxxx';
+  }
+  if (genesMut.slice(142,144) == '' | genesMut.slice(142,144) == 'xx'){
+	  genesBase = genesMut.slice(0, 142);
+	  genesExtend = genesMut.slice(144, genesMut.length);
+	  genesMut = genesBase + 'nn' + genesExtend;
+  }
+  
   return genesMut;
 }
 
@@ -961,8 +1048,9 @@ function createPet(petValue){
     var genes = inputBox.value();
   } else if (petValue == 'mut2'){
 	  genes = mutpress2();
+  } else if (petValue == 'mut3'){
+	  genes = mutpress3();
   }
-
   //***read codes second time
   var groundColorGenes = genes.slice(0,2);
   
@@ -1051,6 +1139,11 @@ function createPet(petValue){
   if(redStripeGenes ==''){
 	  redStripeGenes == 'xxxxxxxx';
   }
+  
+  var blackStripeGenes = genes.slice(142, 144);
+  if (blackStripeGenes == ''){
+    blackStripeGenes == 'xx';
+}
   
   inputBox.value(genes);
   var Readout = codeGenes(genes);
@@ -1309,6 +1402,11 @@ function createPet(petValue){
     image(headstripe, 0, 0, size, size);
   } else if (agoutiGenes[0] == 't' || agoutiGenes[1] == 't'){
     distort(reversetips, 200, 0.002, reversetipsmask, NORMAL, blackColor);
+  }
+  
+  //Mut 3 black dorsal stripe
+  if (blackStripeGenes== 'nn'){
+	  makeTint(color(19), blackAlpha, NORMAL, blackstripe);
   }
 
   // ULTRASTRUCTURE
