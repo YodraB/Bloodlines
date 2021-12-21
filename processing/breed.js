@@ -243,15 +243,15 @@ function chopCode(){
 
     var overoGenes = genes.slice(70, 72);
 	var overoOn = 'No';
-	if (overoGenes[0] == 'a' && overoGenes[1] == 'a'){
+	if (overoGenes[0] == 'a' && overoGenes[1] == 'a') {
     	overoOn = true;
 	}
     print('overoGenes : ' + overoGenes + ' - overo on ' + overoOn);
 
     var overoTweakGenes = genes.slice(72, 76);
 	var overoAmount = 0;
-	for (i = 0; i < overoTweakGenes.length; i+=2 ){
-    	if (overoTweakGenes[i] == 'a' && overoTweakGenes[i + 1] == 'a'){
+	for (i = 0; i < overoTweakGenes.length; i+=2 ) {
+    	if (overoTweakGenes[i] == 'a' && overoTweakGenes[i + 1] == 'a') {
     		overoAmount += 1;
     	}
 	}
@@ -279,7 +279,7 @@ function chopCode(){
 	} else if (whiteFaceAmount == 3){
     	faceWhite = 'Blaze';
 	} else if (whiteFaceAmount == 4){
-    	faceShite = 'Mask';
+    	faceWhite = 'Mask';
 	}
     print('whiteFaceGenes : ' + whiteFaceGenes + ' - face white ' + faceWhite);
 
