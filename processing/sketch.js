@@ -545,7 +545,7 @@ function randGenes(){
   
   var genes = '';
   var sketchmode = 'default';
-  sketchmode = 'debug';
+  //sketchmode = 'debug';
   
   /*** var mode = 'default';
   mode = 'pink';
