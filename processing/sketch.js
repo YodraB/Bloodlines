@@ -55,31 +55,31 @@ function setup() {
   createElement('br');
   inputBox = createInput('Code Here');
   createElement('br');
-  momBox = createInput('Mom Box');
-  dadBox = createInput('Dad Box');
+  //momBox = createInput('Mom Box');
+  //dadBox = createInput('Dad Box');
   inputBox.size(600);
-  inputBox.input(myInputEvent);
+  //inputBox.input(myInputEvent);
   randomButton = createButton('random pet');
   randomButton.mousePressed(randompress);
-  codeButton = createButton('code pet');
-  codeButton.mousePressed(codepress);
-  breedButton = createButton('breed');
-  breedButton.mousePressed(breedpress)
+  //codeButton = createButton('code pet');
+  //codeButton.mousePressed(codepress);
+  //breedButton = createButton('breed');
+  //breedButton.mousePressed(breedpress)
   
   //***buttons here
   createElement('br');
-  mutButton = createButton('white tips');
-  mutButton.mousePressed(mutpress1);
-  mutButton2 = createButton('red dorsal');
-  mutButton2.mousePressed(mutpressA2);
-  mutButton3 = createButton('black dorsal');
-  mutButton3.mousePressed(mutpressA3);
-  mutButton4 = createButton('body stripes');
-  mutButton4.mousePressed(mutpressA4);
-  mutButton5 = createButton('red anklets');
-  mutButton5.mousePressed(mutpressA5);
-  mutButton6 = createButton('black anklets');
-  mutButton6.mousePressed(mutpressA6);
+  //mutButton = createButton('white tips');
+  //mutButton.mousePressed(mutpress1);
+  //mutButton2 = createButton('red dorsal');
+  //mutButton2.mousePressed(mutpressA2);
+  //mutButton3 = createButton('black dorsal');
+  //mutButton3.mousePressed(mutpressA3);
+  //mutButton4 = createButton('body stripes');
+  //mutButton4.mousePressed(mutpressA4);
+  //mutButton5 = createButton('red anklets');
+  //mutButton5.mousePressed(mutpressA5);
+  //mutButton6 = createButton('black anklets');
+  //mutButton6.mousePressed(mutpressA6);
   textBox = createElement('p');
   createElement('br');
   image(lines, 0, 0, size, size);
@@ -142,7 +142,7 @@ function breedpress(){
 		newGenotype += resultA + resultB;
 	}
 	
-	inputBox.value(newGenotype);
+	//inputBox.value(newGenotype);
 	createPet('code');
 }
 
@@ -656,6 +656,7 @@ function randGenes(){
 	var backRightSockGenes = 'aaaA';
 	genes += backRightSockGenes;
 	
+	//this is where things are timing out
 	var sockHeightGenes = 'AAAA'; //'AaAA'; // default 4 'A' = low w/ no white mane; 4 rec = high
 	genes += sockHeightGenes;
 	
@@ -1280,7 +1281,7 @@ function codeGenes(genes){
   Readout += 'blackAnkletGenes : ' + blackAnkletGenes + ' - black anklets ' + blackAnkletOn + '<br>';
   
   //***Readout End
-  return Readout;
+  //return Readout;
 }
 
 //***Mutation1
@@ -1874,7 +1875,8 @@ function createPet(petValue){
   
    //drawSpots(200, 5, 15, blackColor, spotMask);
    //console.log('spots');
-
+   
+	
   // ULTRASTRUCTURE
 
   var blueTint = 'skyblue';
@@ -1882,7 +1884,6 @@ function createPet(petValue){
   if (opalescentOn){
     blueColor = color(10, 238, 255);
   }
-
   //Grey - controls if ultrastructure is blue or grey. 'a' recessive = grey
   if (greyGenes[0] == 'a' && greyGenes[1] == 'a'){
 	  //console.log('grey')
