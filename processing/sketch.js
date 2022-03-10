@@ -55,16 +55,16 @@ function setup() {
   createElement('br');
   inputBox = createInput('Code Here');
   createElement('br');
-  //momBox = createInput('Mom Box');
-  //dadBox = createInput('Dad Box');
+  momBox = createInput('Mom Box');
+  dadBox = createInput('Dad Box');
   inputBox.size(600);
-  //inputBox.input(myInputEvent);
+  inputBox.input(myInputEvent);
   randomButton = createButton('random pet');
   randomButton.mousePressed(randompress);
-  //codeButton = createButton('code pet');
-  //codeButton.mousePressed(codepress);
-  //breedButton = createButton('breed');
-  //breedButton.mousePressed(breedpress)
+  codeButton = createButton('code pet');
+  codeButton.mousePressed(codepress);
+  breedButton = createButton('breed');
+  breedButton.mousePressed(breedpress)
   
   //***buttons here
   createElement('br');
@@ -142,7 +142,7 @@ function breedpress(){
 		newGenotype += resultA + resultB;
 	}
 	
-	//inputBox.value(newGenotype);
+	inputBox.value(newGenotype);
 	createPet('code');
 }
 
